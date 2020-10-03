@@ -8,14 +8,14 @@
 
 Pod::Spec.new do |s|
   s.name             = 'QuickApi'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'QuickApi is a easiest solution for your network layer. You can do your requests just in one line of code.'
 
   s.description      = <<-DESC
   'QuickApi is a most basic way to do your request. Also with QuickApi you can do get, post, delete and multipart requests.'
                        DESC
 
-  s.homepage         = 'https://github.com/Ferhan Akkan/QuickApi'
+  s.homepage         = 'https://github.com/ferhanakkan/QuickApi'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Ferhan Akkan' => 'ferhanakkan@gmail.com' }
