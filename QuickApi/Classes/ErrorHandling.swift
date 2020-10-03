@@ -9,14 +9,14 @@ import Foundation
 
 public class ErrorHandling {
     
-    public var closure: (([String : Any],Int)->(String?))?
+    public var setCustomError: (([String : Any],Int)->(String?))?
     
     public init() {
         
     }
     
     public func getError(json: [String : Any], statusCode: Int) -> String? {
-        return closure?(json, statusCode)
+        return setCustomError?(json, statusCode)
     }
 }
 
