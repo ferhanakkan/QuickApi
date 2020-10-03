@@ -287,8 +287,9 @@ public class Quick {
     
     //MARK: Multipart
     
-    private func upload<T:Decodable>(param:[String: Any], data: [Data]) -> Promise<T>  {
+    private func upload<T:Decodable>(endPoint url: String, param:[String: Any], data: [Data],responseObject: T.Type) -> Promise<T>  {
         return Promise<T>{ seal in
+            endPoint = multiPartUrl+url
             let headers: HTTPHeaders
             if let token = UserDefaults.standard.string(forKey: "tokenFA") {
                 headers = ["Authorization": "Bearer \(token)", "Content-Type" : "multipart/form-data"]
