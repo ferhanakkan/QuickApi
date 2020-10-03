@@ -41,10 +41,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        Quick.shared.setApiBaseUrl(url: "http://51.124.79.0/api/?do=produce/aps")
+        Quick.shared.setApiBaseUrl(url: "http://51.124.79.0/")
         Quick.shared.timeOutTime = 20
         Quick.shared.showResponseJSONOnConsole = true
-        Quick.shared.getRequest(endPoint: "", responseObject: CoreResponse<FarmerFieldEditApsModel>.self) { (res, err) in
+        Quick.shared.getRequest(endPoint: "api/", parameters: ["do":"produce/aps"], responseObject: CoreResponse<FarmerFieldEditApsModel>.self) { (res, err) in
             if let controledError = err {
                 print(controledError.localizedDescription)
             } else {

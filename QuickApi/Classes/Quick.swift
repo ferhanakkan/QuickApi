@@ -61,7 +61,7 @@ public class Quick {
         }
     }
     
-    public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int, size: Int, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int, size: Int, responseObject: T.Type ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.getPagination(url: endPoint, page: page, size: size, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -72,7 +72,7 @@ public class Quick {
         }
     }
     
-    public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int = 0, size: Int = 20, responseObject: T ,completion: @escaping (T?, Error?) -> ()) {
+    public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int = 0, size: Int = 20, responseObject: T.Type ,completion: @escaping (T?, Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.getPagination(url: endPoint, page: page, size: size, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -84,7 +84,7 @@ public class Quick {
     }
     
     
-    public func postRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func postRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.post(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -95,7 +95,7 @@ public class Quick {
         }
     }
 
-    public func postRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,Error?) -> ()) {
+    public func postRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.post(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -106,7 +106,7 @@ public class Quick {
         }
     }
     
-    public func putRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func putRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.put(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -117,7 +117,7 @@ public class Quick {
         }
     }
 
-    public func putRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,Error?) -> ()) {
+    public func putRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.put(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -128,7 +128,7 @@ public class Quick {
         }
     }
     
-    public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.patch(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -139,7 +139,7 @@ public class Quick {
         }
     }
 
-    public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,Error?) -> ()) {
+    public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.patch(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -150,7 +150,7 @@ public class Quick {
         }
     }
     
-    public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.delete(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -161,7 +161,7 @@ public class Quick {
         }
     }
 
-    public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,Error?) -> ()) {
+    public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.delete(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -361,7 +361,7 @@ public class Quick {
     
     //MARK: - Actions
     
-    private func getPagination<T:Decodable>(url: String, page: Int, size: Int, decodeObject: T) -> Promise<T> {
+    private func getPagination<T:Decodable>(url: String, page: Int, size: Int, decodeObject: T.Type) -> Promise<T> {
         endPoint = baseApiUrl+url
         return self.request(fullUrl: endPoint, method: .get, parameters: ["page":page, "size": size])
     }
@@ -371,22 +371,22 @@ public class Quick {
         return self.request(fullUrl: endPoint , method: HTTPMethod.get , parameters : parameters)
     }
     
-    private func post<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T) -> Promise<T>  {
+    private func post<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T.Type) -> Promise<T>  {
         endPoint = baseApiUrl+url
         return self.request(fullUrl: endPoint , method: HTTPMethod.post , parameters : parameters)
     }
     
-    private func put<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T) -> Promise<T> {
+    private func put<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T.Type) -> Promise<T> {
         endPoint = baseApiUrl+url
         return self.request(fullUrl: endPoint , method: HTTPMethod.put , parameters : parameters)
     }
     
-    private func patch<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T) -> Promise<T> {
+    private func patch<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T.Type) -> Promise<T> {
         endPoint = baseApiUrl+url
         return self.request(fullUrl: endPoint , method: HTTPMethod.patch , parameters : parameters)
     }
     
-    private func delete<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T) -> Promise<T> {
+    private func delete<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type) -> Promise<T> {
         endPoint = baseApiUrl+url
         return self.request(fullUrl: endPoint , method: HTTPMethod.delete , parameters : parameters)
     }
