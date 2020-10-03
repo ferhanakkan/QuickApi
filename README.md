@@ -11,8 +11,6 @@ AuthTextField allows you to easily create and validate animated textfields on th
 [![License](https://img.shields.io/cocoapods/l/AuthTextField.svg?style=flat)](https://cocoapods.org/pods/QuickApi)
 [![Platform](https://img.shields.io/cocoapods/p/AuthTextField.svg?style=flat)](https://cocoapods.org/pods/QuickApi)
 
-<img src="https://github.com/ferhanakkan/Weather-App/blob/master/Weather%20App/Assets.xcassets/general.dataset/general.gif" width="220" height="400"/>
-
 ## Contents
 
 - [Requirements](#requirements)
@@ -22,17 +20,17 @@ AuthTextField allows you to easily create and validate animated textfields on th
 - [License](#license)
 
 ## Requirements
-- iOS 12+
+- iOS 11+
 - Swift 5+
 - Xcode 10+
 
 ## Installation
 
-AuthTextField is available through [CocoaPods](https://cocoapods.org). To install
+QuickApi is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'AuthTextField'
+pod 'QuickApi'
 ```
 
 ## Usage 
