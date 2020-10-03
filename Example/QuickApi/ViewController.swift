@@ -9,11 +9,16 @@
 import UIKit
 import QuickApi
 
+struct Test: Decodable {
+    var a: Int
+}
+
 class ViewController: UIViewController {
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        Quick.shared.acceptLanguageCode = "as"
         // Do any additional setup after loading the view, typically from a nib.
     }
 

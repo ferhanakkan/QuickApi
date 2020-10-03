@@ -10,7 +10,7 @@ import PromiseKit
 
 public class Quick {
     
-    public var shared = Quick()
+    public static var shared = Quick()
 
     public var timeOutTime = 0 {
         didSet {
@@ -22,6 +22,7 @@ public class Quick {
     
     public var acceptLanguageCode = ""
     public var showResponseJSONOnConsole = false
+    public var customErrorModel = false
     
     private var endPoint: String = ""
     private var baseApiUrl = ""
@@ -227,12 +228,14 @@ public class Quick {
                                 print("QuickApi response : \(json)")
                             }
                             
-//                            if let code = response.response?.statusCode {
-//                                if let errorString = CoreServiceErrorHandling().getError(json: json, statusCode: code) {
-//                                    let error = NSError(domain:"", code:code, userInfo:[ NSLocalizedDescriptionKey: errorString]) as Error
-//                                    seal.reject(error)
-//                                }
-//                            }
+                            if self.customErrorModel {
+                                if let code = response.response?.statusCode {
+                                    if let errorString = ErrorHandling().getError(json: json, statusCode: code) {
+                                        let error = NSError(domain:"", code:code, userInfo:[ NSLocalizedDescriptionKey: errorString]) as Error
+                                        seal.reject(error)
+                                    }
+                                }
+                            }
                             seal.reject(error)
                         }
                     } else {
@@ -296,12 +299,14 @@ public class Quick {
                             print("QuickApi response : \(json)")
                         }
                         
-//                        if let code = response.response?.statusCode {
-//                            if let errorString = CoreServiceErrorHandling().getError(json: json, statusCode: code) {
-//                                let error = NSError(domain:"", code:code, userInfo:[ NSLocalizedDescriptionKey: errorString]) as Error
-//                                seal.reject(error)
-//                            }
-//                        }
+                        if self.customErrorModel {
+                            if let code = response.response?.statusCode {
+                                if let errorString = ErrorHandling().getError(json: json, statusCode: code) {
+                                    let error = NSError(domain:"", code:code, userInfo:[ NSLocalizedDescriptionKey: errorString]) as Error
+                                    seal.reject(error)
+                                }
+                            }
+                        }
                         seal.reject(error)
                     }
                     print("QuickApi response nil \(String(describing: response.error?.localizedDescription))")
