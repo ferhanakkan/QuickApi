@@ -8,9 +8,10 @@
 import Alamofire
 import PromiseKit
 
-class CoreService {
+class FA {
     
-    private var baseApiUrl = Bundle.main.object(forInfoDictionaryKey: "ApiUrl") as! String
+    private var baseApiUrl = ""
+    private var multiPartUrl = ""
     private var endPoint: String = ""
     
     private let sessionManager: Session?
@@ -59,12 +60,6 @@ class CoreService {
                 .validate(statusCode: 200..<300)
                 .responseDecodable { (response: DataResponse<T, AFError>) in
                     if response.data != nil {
-//
-//                        guard let json = try? JSONSerialization.jsonObject(with: response.data!, options: []) as? [String: Any] else{
-////                            seal.reject(error)
-//                            return
-//                        }
-//                        print("response test Will delete in relase\(json)")
                         
                         switch response.result {
                         case .success(let value):
@@ -103,7 +98,11 @@ class CoreService {
     func upload<T:Decodable>(param:[String: Any], imageData: Data) -> Promise<T>  {
         return Promise<T>{ seal in
             let headers: HTTPHeaders
-            headers = ["Authorization": "Bearer \(UserDefaults.standard.string(forKey: "token")!)", "Content-Type" : "multipart/form-data"]
+            if let token = UserDefaults.standard.string(forKey: "token") {
+                headers = ["Authorization": "Bearer \(token)", "Content-Type" : "multipart/form-data"]
+            } else {
+                headers = ["Content-Type" : "multipart/form-data"]
+            }
             
             AF.upload(multipartFormData: { (multipart) in
                 for (key, value) in param {
@@ -111,7 +110,7 @@ class CoreService {
                 }
                 multipart.append(imageData, withName: "upload[0]", fileName: "photo.jpg", mimeType: "image/jpeg")
                 
-            },to: "http://www.4mevsimapi.com/omr/upload/", usingThreshold: UInt64.init(),
+            },to: multiPartUrl , usingThreshold: UInt64.init(),
             method: .post,
             headers: headers)
             .validate(statusCode: 200..<300)
