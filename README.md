@@ -62,6 +62,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 
 ```swift
+
 import UIKit
 import QuickApi
 
@@ -88,6 +89,9 @@ class ViewController: UIViewController {
             if let controledError = err {
                 print(controledError)
             } else {
+                if let controledJson = json as? [[String: Any]] {
+                    print(controledJson)
+                }
                 print(response)
             }
         }
@@ -106,6 +110,9 @@ class ViewController: UIViewController {
             if let controledError = err {
                 print(controledError)
             } else {
+                if let controledJson = json as? [String: Any] {
+                    print(controledJson)
+                }
                 print(response)
             }
         }
@@ -124,6 +131,9 @@ class ViewController: UIViewController {
             if let controledError = err {
                 print(controledError)
             } else {
+                if let controledJson = json as? [String: Any] {
+                    print(controledJson)
+                }
                 print(response)
             }
         }
@@ -142,6 +152,9 @@ class ViewController: UIViewController {
             if let controledError = err {
                 print(controledError)
             } else {
+                if let controledJson = json as? [String: Any] {
+                    print(controledJson)
+                }
                 print(response)
             }
         }
@@ -155,7 +168,7 @@ class ViewController: UIViewController {
             }
         }
     }
-
+}
 ```
 
 ### Error Handling
