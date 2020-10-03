@@ -9,17 +9,46 @@
 import UIKit
 import QuickApi
 
-struct Test: Decodable {
+struct Testasdf: Decodable {
     var a: Int
 }
+
 
 class ViewController: UIViewController {
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        Quick.shared.acceptLanguageCode = "as"
-        // Do any additional setup after loading the view, typically from a nib.
+        
+//        let test = ErrorHandling()
+//        Quick.shared.errorModel.closure = { json, statusCode in
+//            if let messagea = json["test"] as? [String:Any] {
+//                if let text = messagea["test"] as? String {
+//                    return text
+//                } else {
+//                    return nil
+//                }
+//            }
+//            if let message = json["message"] as? [String:Any] {
+//                if let text = message["text"] as? String {
+//                    return text
+//                } else {
+//                    return nil
+//                }
+//            } else if let errors = json["errors"] as? [String: Any] {
+//                if let sub = errors["subError"] as? String {
+//                    return sub
+//                } else {
+//                    return nil
+//                }
+//            } else {
+//                return nil
+//            }
+//        }
+//        let ar = Quick.shared.errorModel.getError(json: ["test": ["test": "asdqweasdqwe"]], statusCode: 2)
+//        print("test \(ar)")
+        
+        
     }
 
     override func didReceiveMemoryWarning() {

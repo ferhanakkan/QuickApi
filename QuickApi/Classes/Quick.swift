@@ -19,7 +19,7 @@ public class Quick {
             sessionManager = Alamofire.Session(configuration: configuration)
         }
     }
-    
+    public var errorModel = ErrorHandling()
     public var acceptLanguageCode = ""
     public var showResponseJSONOnConsole = false
     public var customErrorModel = false
@@ -35,7 +35,7 @@ public class Quick {
     public init() {
         
     }
-    
+        
     //MARK: Completion Converter
     
     public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
