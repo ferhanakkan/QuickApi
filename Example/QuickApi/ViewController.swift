@@ -9,9 +9,31 @@
 import UIKit
 import QuickApi
 
-struct Testasdf: Codable {
-    var a: Int
+public struct Test: Codable {
+    var a: Int?
 }
+
+struct FarmerFieldEditApsModel: Codable {
+    var aps: [SubFarmerFieldEditApsModel]? = []
+}
+
+struct SubFarmerFieldEditApsModel: Codable {
+    var id: Int?
+    var name: String?
+}
+
+struct CoreResponse <T: Codable>: Decodable{
+    let status: Int?
+    let message: CoreMessage?
+    let errors: String?
+    let data: T?
+}
+
+struct CoreMessage: Codable {
+    var text: String?
+    var type: String?
+}
+
 
 
 class ViewController: UIViewController {
@@ -19,10 +41,17 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        Quick.shared.getRequest(endPoint: "a", responseObject: Testasdf) { (res, err) in
-            print(res)
+        Quick.shared.setApiBaseUrl(url: "http://51.124.79.0/api/?do=produce/aps")
+        Quick.shared.timeOutTime = 20
+        Quick.shared.showResponseJSONOnConsole = true
+        Quick.shared.getRequest(endPoint: "", responseObject: CoreResponse<FarmerFieldEditApsModel>.self) { (res, err) in
+            if let controledError = err {
+                print(controledError.localizedDescription)
+            } else {
+
+            }
         }
+        
         
         
         

@@ -36,19 +36,10 @@ public class Quick {
 
     public init() {
     }
-    
-    struct Testasdf: Codable {
-        var a: Int
-    }
-    
-    public func testter() {
-        self.getRequest(endPoint: "q", responseObject: Testasdf) { (res, json, err) in
-            print(res)
-        }
-    }
+
     //MARK: Completion Converter
     
-    public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, responseObject: T.Type ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.get(url: endPoint, parameters: parameters, decodeObject: responseObject).done { (res) in
             completion(res, self.responseJson, nil)
@@ -59,7 +50,7 @@ public class Quick {
         }
     }
     
-    public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, responseObject: T ,completion: @escaping (T?, Error?) -> ()) {
+    public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, responseObject: T.Type ,completion: @escaping (T?, Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.get(url: endPoint, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
@@ -375,7 +366,7 @@ public class Quick {
         return self.request(fullUrl: endPoint, method: .get, parameters: ["page":page, "size": size])
     }
     
-    private func get<T: Decodable>(url: String, parameters : [String:Any]? = nil, decodeObject: T) -> Promise<T> {
+    private func get<T: Decodable>(url: String, parameters : [String:Any]? = nil, decodeObject: T.Type) -> Promise<T> {
             endPoint = baseApiUrl+url
         return self.request(fullUrl: endPoint , method: HTTPMethod.get , parameters : parameters)
     }
