@@ -1,0 +1,16 @@
+PODS:
+  - QuickApi (0.1.0)
+
+DEPENDENCIES:
+  - QuickApi (from `../`)
+
+EXTERNAL SOURCES:
+  QuickApi:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  QuickApi: 355f2074be4095d6435ec797e795185cce492cdb
+
+PODFILE CHECKSUM: 80e6fe29c954dfb20b6a3e42ba02ca079fd496c1
+
+COCOAPODS: 1.9.3

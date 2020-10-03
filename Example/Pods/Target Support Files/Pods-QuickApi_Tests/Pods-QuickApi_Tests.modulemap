@@ -1,0 +1,6 @@
+framework module Pods_QuickApi_Tests {
+  umbrella header "Pods-QuickApi_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

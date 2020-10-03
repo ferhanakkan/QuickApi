@@ -1,0 +1,22 @@
+{
+  "name": "QuickApi",
+  "version": "0.1.0",
+  "summary": "A short description of QuickApi.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/Ferhan Akkan/QuickApi",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Ferhan Akkan": "ferhan.akkan@portalgrup.com"
+  },
+  "source": {
+    "git": "https://github.com/Ferhan Akkan/QuickApi.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "QuickApi/Classes/**/*"
+}

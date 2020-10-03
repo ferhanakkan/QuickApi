@@ -1,0 +1,6 @@
+framework module QuickApi {
+  umbrella header "QuickApi-umbrella.h"
+
+  export *
+  module * { export * }
+}
