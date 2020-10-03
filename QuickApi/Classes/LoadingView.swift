@@ -29,6 +29,7 @@ public class LoadingView {
 
         let subView = UIView()
         subView.backgroundColor = loadingBackgroundColor
+        subView.translatesAutoresizingMaskIntoConstraints = false
         mainView.addSubview(subView)
         mainView.bringSubviewToFront(subView)
         
@@ -43,7 +44,7 @@ public class LoadingView {
         subView.addSubview(loadingSubView!)
         loadingSubView?.cornerRadius = 15
         loadingSubView?.backgroundColor = loadingSubViewBackgroundColor
-        
+        loadingSubView?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             loadingSubView!.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
             loadingSubView!.centerYAnchor.constraint(equalTo: mainView.centerYAnchor),
@@ -53,12 +54,10 @@ public class LoadingView {
         
         let loadingInducator = UIActivityIndicatorView()
         loadingSubView?.addSubview(loadingInducator)
-        
+        loadingInducator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            loadingInducator.leadingAnchor.constraint(equalTo: loadingInducator.leadingAnchor, constant: 20),
-            loadingInducator.trailingAnchor.constraint(equalTo: loadingInducator.trailingAnchor, constant: -20),
-            loadingInducator.centerXAnchor.constraint(equalTo: loadingInducator.centerXAnchor),
-            loadingInducator.centerYAnchor.constraint(equalTo: loadingInducator.centerYAnchor),
+            loadingInducator.centerXAnchor.constraint(equalTo: loadingSubView!.centerXAnchor),
+            loadingInducator.centerYAnchor.constraint(equalTo: loadingSubView!.centerYAnchor),
         ])
         
         loadingInducator.startAnimating()

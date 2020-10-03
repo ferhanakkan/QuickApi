@@ -42,8 +42,8 @@ public class Quick {
     public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, responseObject: T.Type ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
         self.get(url: endPoint, parameters: parameters, decodeObject: responseObject).done { (res) in
-            completion(res, self.responseJson, nil)
             LoadingView.hide()
+            completion(res, self.responseJson, nil)
         }.catch { (err) in
             LoadingView.hide()
             completion(nil, self.responseJson, err)

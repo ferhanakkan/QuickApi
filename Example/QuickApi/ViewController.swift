@@ -41,8 +41,14 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        }
+        
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         Quick.shared.setApiBaseUrl(url: "http://51.124.79.0/")
         Quick.shared.timeOutTime = 20
+        Quick.shared.showLoadingInducator = true
         Quick.shared.showResponseJSONOnConsole = true
         Quick.shared.getRequest(endPoint: "api/", parameters: ["do":"produce/aps"], responseObject: CoreResponse<FarmerFieldEditApsModel>.self) { (res, err) in
             if let controledError = err {
@@ -50,12 +56,9 @@ class ViewController: UIViewController {
             } else {
 
             }
-        }
+    }
         
         
-        
-        
-        LoadingView.show()
 //        let test = ErrorHandling()
 //        Quick.shared.errorModel.closure = { json, statusCode in
 //            if let messagea = json["test"] as? [String:Any] {
