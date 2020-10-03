@@ -1,16 +1,37 @@
 PODS:
-  - QuickApi (0.1.0)
+  - Alamofire (5.2.2)
+  - PromiseKit (6.13.1):
+    - PromiseKit/CorePromise (= 6.13.1)
+    - PromiseKit/Foundation (= 6.13.1)
+    - PromiseKit/UIKit (= 6.13.1)
+  - PromiseKit/CorePromise (6.13.1)
+  - PromiseKit/Foundation (6.13.1):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (6.13.1):
+    - PromiseKit/CorePromise
+  - QuickApi (0.1.0):
+    - Alamofire (~> 5.2)
+    - PromiseKit (~> 6.8)
 
 DEPENDENCIES:
+  - Alamofire (~> 5.2)
+  - PromiseKit (~> 6.8)
   - QuickApi (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - PromiseKit
 
 EXTERNAL SOURCES:
   QuickApi:
     :path: "../"
 
 SPEC CHECKSUMS:
-  QuickApi: 355f2074be4095d6435ec797e795185cce492cdb
+  Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
+  PromiseKit: 28fda91c973cc377875d8c0ea4f973013c05b6db
+  QuickApi: 74bc587e088782afbd61302a645f0d478bcadc0a
 
-PODFILE CHECKSUM: 80e6fe29c954dfb20b6a3e42ba02ca079fd496c1
+PODFILE CHECKSUM: 0344d1cf2216b1cf78fa1a824ed07e71fb37165b
 
 COCOAPODS: 1.9.3

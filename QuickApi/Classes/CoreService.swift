@@ -6,6 +6,7 @@
 //
 
 import Alamofire
+import PromiseKit
 
 class CoreService {
     
@@ -25,7 +26,7 @@ class CoreService {
         let userDefaults = UserDefaults.standard
         let headerLang = userDefaults.value(forKey: "langHeader") as? String ?? "en-US"
 
-        if let token: String = UserDefaults.standard.value(forKey: Constants.Api.token) as? String {
+        if let token: String = UserDefaults.standard.value(forKey: "token") as? String {
                     print("request token Will delete in relase \(token)")
             return  ["Authorization": "Bearer \(token)",
                      "Content-Type" : "application/json",
@@ -79,12 +80,12 @@ class CoreService {
                                 return
                             }
                             
-                            if let code = response.response?.statusCode {
-                                if let errorString = CoreServiceErrorHandling().getError(json: json, statusCode: code) {
-                                    let error = NSError(domain:"", code:code, userInfo:[ NSLocalizedDescriptionKey: errorString]) as Error
-                                    seal.reject(error)
-                                }
-                            }
+//                            if let code = response.response?.statusCode {
+//                                if let errorString = CoreServiceErrorHandling().getError(json: json, statusCode: code) {
+//                                    let error = NSError(domain:"", code:code, userInfo:[ NSLocalizedDescriptionKey: errorString]) as Error
+//                                    seal.reject(error)
+//                                }
+//                            }
                             seal.reject(error)
                         }
                     } else {
@@ -130,12 +131,12 @@ class CoreService {
                             return
                         }
                         
-                        if let code = response.response?.statusCode {
-                            if let errorString = CoreServiceErrorHandling().getError(json: json, statusCode: code) {
-                                let error = NSError(domain:"", code:code, userInfo:[ NSLocalizedDescriptionKey: errorString]) as Error
-                                seal.reject(error)
-                            }
-                        }
+//                        if let code = response.response?.statusCode {
+//                            if let errorString = CoreServiceErrorHandling().getError(json: json, statusCode: code) {
+//                                let error = NSError(domain:"", code:code, userInfo:[ NSLocalizedDescriptionKey: errorString]) as Error
+//                                seal.reject(error)
+//                            }
+//                        }
                         seal.reject(error)
                     }
                 } else {
@@ -156,12 +157,8 @@ class CoreService {
         return self.request(fullUrl: endPoint, method: .get, parameters: ["page":page, "size": size])
     }
     
-    func get<T: Decodable>(url: String, parameters : [String:Any]? = nil, anotherApi: String? = nil) -> Promise<T> {
-        if let anotherUrl = anotherApi {
-            endPoint = anotherUrl
-        } else {
+    func get<T: Decodable>(url: String, parameters : [String:Any]? = nil) -> Promise<T> {
             endPoint = baseApiUrl+url
-        }
         return self.request(fullUrl: endPoint , method: HTTPMethod.get , parameters : parameters)
     }
     
