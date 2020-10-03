@@ -173,32 +173,45 @@ class ViewController: UIViewController {
 
 ### Error Handling
 
-Acıklama!!!
+As Quick, we found the biggest problem in generic services, to deal with the error, by leaving the solution to you. Normally, if Quick.shared.customErrorModel = false as the QuickApi library, we give an error return as the model you have given can be decoded or not. However, if you set your own error model as custom, error messages will return to you as errors, except 200-300 returned from the service. Let's look at an example ... 
 
 ```swift
-
 import UIKit
-import AuthTextField
+import QuickApi
 
 class ViewController: UIViewController {
-    
-    let nameTextfield = AuthField()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        nameTextfield.inputType = .name
+
         
-        self.view.addSubview(nameTextfield)
-        nameTextfield.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            nameTextfield.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,constant: 20),
-            nameTextfield.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,constant: -20),
-            nameTextfield.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            nameTextfield.heightAnchor.constraint(equalToConstant: 50)
-
-        ])
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+         
+        //You can do this action where ever you want!!!
+       
+        Quick.shared.errorModel.setCustomError = { json, statusCode in
+            if let messagea = json["test"] as? [String:Any] {
+                if let text = messagea["test"] as? String {
+                    return text
+                } else {
+                    return nil
+                }
+            }
+            if let message = json["message"] as? [String:Any] {
+                if let text = message["messageText"] as? String {
+                    return text
+                } else {
+                    return nil
+                }
+            } else if let errors = json["errors"] as? [String: Any] {
+                if let sub = errors["errorText"] as? String {
+                    return sub
+                } else {
+                    return nil
+                }
+            } else {
+                return nil
+            }
+        }
     }
-
 }
 ```
 
