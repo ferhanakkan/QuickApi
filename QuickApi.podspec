@@ -16,11 +16,9 @@ Pod::Spec.new do |s|
                        DESC
 
   s.homepage         = 'https://github.com/ferhanakkan/QuickApi'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Ferhan Akkan' => 'ferhanakkan@gmail.com' }
   s.source           = { :git => 'https://github.com/ferhanakkan/QuickApi.git', :tag => s.version.to_s }
-  #   s.social_media_url = 'https://www.linkedin.com/in/ferhanakkan'
 
   s.ios.deployment_target = '11.0'
   s.swift_version = "5.0"
@@ -33,12 +31,4 @@ Pod::Spec.new do |s|
   
   s.dependency 'Alamofire', '~> 5.2'
   s.dependency "PromiseKit", "~> 6.8"
-  
-  # s.resource_bundles = {
-  #   'QuickApi' => ['QuickApi/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end

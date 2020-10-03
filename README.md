@@ -221,7 +221,7 @@ ferhanakkan, ferhanakkan@gmail.com
 
 ## License
 
-AuthTextField is available under the MIT license. See the LICENSE file for more info.
+QuickApi is available under the MIT license. See the LICENSE file for more info.
 
 
 

@@ -17,7 +17,6 @@ struct TestApiResponse: Codable {
 }
 
 struct TestApiDeleteResponse: Codable {
-
 }
 
 

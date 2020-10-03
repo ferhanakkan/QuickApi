@@ -1,5 +1,5 @@
 //
-//  UIView.swift
+//  UIView+Extension.swift
 //  QuickApi
 //
 //  Created by Ferhan Akkan on 3.10.2020.

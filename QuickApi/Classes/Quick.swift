@@ -24,7 +24,7 @@ public class Quick {
     public var acceptLanguageCode = ""
     public var showResponseJSONOnConsole = false
     public var customErrorModel = false
-    public var showLoadingInducator = false
+    public var showLoadingIndicator = false
     
     private var endPoint: String = ""
     private var baseApiUrl = ""
@@ -44,7 +44,7 @@ public class Quick {
     //MARK: Completion Converter
     
     public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, responseObject: T.Type ,completion: @escaping (T?,Any, Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.get(url: endPoint, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
@@ -55,7 +55,7 @@ public class Quick {
     }
     
     public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, responseObject: T.Type ,completion: @escaping (T?, Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.get(url: endPoint, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
@@ -66,7 +66,7 @@ public class Quick {
     }
     
     public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int, size: Int, responseObject: T.Type ,completion: @escaping (T?,Any, Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.getPagination(url: endPoint, page: page, size: size, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
@@ -77,7 +77,7 @@ public class Quick {
     }
     
     public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int = 0, size: Int = 20, responseObject: T.Type ,completion: @escaping (T?, Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.getPagination(url: endPoint, page: page, size: size, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
@@ -89,7 +89,7 @@ public class Quick {
     
     
     public func postRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Any , Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.post(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
@@ -100,7 +100,7 @@ public class Quick {
     }
 
     public func postRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.post(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
@@ -111,7 +111,7 @@ public class Quick {
     }
     
     public func putRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?, Any , Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.put(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
@@ -122,7 +122,7 @@ public class Quick {
     }
 
     public func putRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.put(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
@@ -133,7 +133,7 @@ public class Quick {
     }
     
     public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Any , Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.patch(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
@@ -144,7 +144,7 @@ public class Quick {
     }
 
     public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.patch(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
@@ -155,7 +155,7 @@ public class Quick {
     }
     
     public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Any, Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.delete(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
@@ -166,7 +166,7 @@ public class Quick {
     }
 
     public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T.Type ,completion: @escaping (T?,Error?) -> ()) {
-        showLoadingInducator ? LoadingView.show() : nil
+        showLoadingIndicator ? LoadingView.show() : nil
         self.delete(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
@@ -181,22 +181,22 @@ public class Quick {
     
     public func clearToken() {
         let userDefaults = UserDefaults.standard
-        userDefaults.setValue(nil, forKey: "tokenFA")
+        userDefaults.setValue(nil, forKey: Constants.token)
     }
     
     public func setToken(token: String) {
         let userDefaults = UserDefaults.standard
-        userDefaults.setValue(token, forKey: "tokenFA")
+        userDefaults.setValue(token, forKey: Constants.token)
     }
 
     public func setAcceptlanguage(code: String) {
         let userDefaults = UserDefaults.standard
-        userDefaults.setValue(code, forKey: "langCodeFA")
+        userDefaults.setValue(code, forKey: Constants.langCode)
     }
     
     public func clearAcceptLanguage() {
         let userDefaults = UserDefaults.standard
-        userDefaults.setValue(nil, forKey: "langCodeFA")
+        userDefaults.setValue(nil, forKey: Constants.langCode)
     }
     
     public func setApiBaseUrl(url: String) {
@@ -213,7 +213,7 @@ public class Quick {
     
     private func headers() -> HTTPHeaders {
 
-        if let token: String = UserDefaults.standard.value(forKey: "tokenFA") as? String {
+        if let token: String = UserDefaults.standard.value(forKey: Constants.token) as? String {
             if acceptLanguageCode != "" {
                 return  ["Authorization": "Bearer \(token)",
                          "Content-Type" : "application/json",
@@ -252,7 +252,6 @@ public class Quick {
                 .validate(statusCode: 200..<300)
                 .responseDecodable { (response: DataResponse<T, AFError>) in
                     if response.data != nil {
-                        
                         switch response.result {
                         case .success(let value):
                             if let json = try? JSONSerialization.jsonObject(with: response.data!, options: []) as? [String: Any]  {
@@ -261,7 +260,6 @@ public class Quick {
                                     print("QuickApi response : \(json)")
                                 }
                             }
-                            
                             if let json = try? JSONSerialization.jsonObject(with: response.data!, options: []) as? [[String: Any]]  {
                                 self.responseJson = json
                                 if self.showResponseJSONOnConsole {
@@ -311,7 +309,7 @@ public class Quick {
         return Promise<T>{ seal in
             endPoint = multiPartUrl+url
             let headers: HTTPHeaders
-            if let token = UserDefaults.standard.string(forKey: "tokenFA") {
+            if let token = UserDefaults.standard.string(forKey: Constants.token) {
                 headers = ["Authorization": "Bearer \(token)", "Content-Type" : "multipart/form-data"]
             } else {
                 headers = ["Content-Type" : "multipart/form-data"]
