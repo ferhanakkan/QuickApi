@@ -19,7 +19,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        LoadingView.show()
 //        let test = ErrorHandling()
 //        Quick.shared.errorModel.closure = { json, statusCode in
 //            if let messagea = json["test"] as? [String:Any] {

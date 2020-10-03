@@ -19,10 +19,12 @@ public class Quick {
             sessionManager = Alamofire.Session(configuration: configuration)
         }
     }
+    
     public var errorModel = ErrorHandling()
     public var acceptLanguageCode = ""
     public var showResponseJSONOnConsole = false
     public var customErrorModel = false
+    public var showLoadingInducator = false
     
     private var endPoint: String = ""
     private var baseApiUrl = ""
@@ -33,104 +35,139 @@ public class Quick {
     private let configuration = URLSessionConfiguration.default
 
     public init() {
-        
     }
         
     //MARK: Completion Converter
     
     public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.get(url: endPoint, parameters: parameters, decodeObject: decodeObject).done { (res) in
             completion(res, self.responseJson, nil)
+            LoadingView.hide()
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, self.responseJson, err)
         }
     }
     
     public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, decodeObject: T ,completion: @escaping (T?, Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.get(url: endPoint, parameters: parameters, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, err)
         }
     }
     
     public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int, size: Int, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.getPagination(url: endPoint, page: page, size: size, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, self.responseJson, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, self.responseJson, err)
         }
     }
     
     public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int = 0, size: Int = 20, decodeObject: T ,completion: @escaping (T?, Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.getPagination(url: endPoint, page: page, size: size, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, err)
         }
     }
     
     
     public func postRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.post(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, self.responseJson, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, self.responseJson, err)
         }
     }
 
     public func postRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.post(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, err)
         }
     }
     
     public func putRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.put(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, self.responseJson, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, self.responseJson, err)
         }
     }
 
     public func putRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.put(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, err)
         }
     }
     
     public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.patch(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, self.responseJson, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, self.responseJson, err)
         }
     }
 
     public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.patch(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, err)
         }
     }
     
     public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.delete(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, self.responseJson, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, self.responseJson, err)
         }
     }
 
     public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,Error?) -> ()) {
+        showLoadingInducator ? LoadingView.show() : nil
         self.delete(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+            LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
+            LoadingView.hide()
             completion(nil, err)
         }
     }
