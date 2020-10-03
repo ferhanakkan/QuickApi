@@ -51,7 +51,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     Quick.shared.setToken(token: "123123") // If you want you can also add Accept language to your Http Header. You can do this actions also in another part of app. It will be saved on local database.
     LoadingView.loadingBackgroundColor = UIColor.darkGray.withAlphaComponent(0.8) // It's preset color of main background color of Loading View it also can be changed if you prefer.
     LoadingView.loadingSubViewBackgroundColor = UIColor.lightGray // It's preset color of inducator background color of Loading View it also can be changed if you prefer.
- 
+    
     return true
 }
 ```
@@ -59,7 +59,108 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 ### Quick Start
 
-#### Programmatically usage
+
+
+```swift
+import UIKit
+import QuickApi
+
+struct TestApiResponse: Codable {
+    var id: Int
+    var title: String
+    var body: String
+    var userId: Int
+}
+
+struct TestApiDeleteResponse: Codable {
+
+}
+
+
+class ViewController: UIViewController {
+
+        
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        //Get action with response and Json
+        Quick.shared.getRequest(endPoint: "posts/", responseObject: [TestApiResponse].self) { (response, json, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+
+        //Get action with response
+        Quick.shared.getRequest(endPoint: "posts/", responseObject: [TestApiResponse].self) { (response, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+
+        //Post aciton with Json Response and Json
+        Quick.shared.postRequest(url: "posts", parameters: ["title": "quickApi", "body": "quickApiBody","userId": 1], responseObject: TestApiResponse.self) { (response, json, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+
+        //Post aciton with Json Response
+        Quick.shared.postRequest(url: "posts", parameters: ["title": "quickApi", "body": "quickApiBody","userId": 1], responseObject: TestApiResponse.self) { (response, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+        
+        //Put aciton with Json Response and Json
+        Quick.shared.patchRequest(url: "posts/1", parameters: ["title": "quickApi"], responseObject: TestApiResponse.self) { (response, json, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+
+        //Put aciton with Json Response
+        Quick.shared.patchRequest(url: "posts/1", parameters: ["title": "quickApi"], responseObject: TestApiResponse.self) { (response, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+        
+        //Delete aciton with Json Response and Json
+        Quick.shared.deleteRequest(url: "posts/1", parameters: nil, responseObject: TestApiDeleteResponse.self) { (response, json, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+
+        //Delete aciton with Json Response
+        Quick.shared.deleteRequest(url: "posts/1", parameters: nil, responseObject: TestApiDeleteResponse.self) { (response, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+    }
+
+```
+
+### Error Handling
+
+Acıklama!!!
 
 ```swift
 

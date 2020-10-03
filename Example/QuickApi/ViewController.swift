@@ -9,53 +9,95 @@
 import UIKit
 import QuickApi
 
-public struct Test: Codable {
-    var a: Int?
+struct TestApiResponse: Codable {
+    var id: Int
+    var title: String
+    var body: String
+    var userId: Int
 }
 
-struct FarmerFieldEditApsModel: Codable {
-    var aps: [SubFarmerFieldEditApsModel]? = []
-}
+struct TestApiDeleteResponse: Codable {
 
-struct SubFarmerFieldEditApsModel: Codable {
-    var id: Int?
-    var name: String?
 }
-
-struct CoreResponse <T: Codable>: Decodable{
-    let status: Int?
-    let message: CoreMessage?
-    let errors: String?
-    let data: T?
-}
-
-struct CoreMessage: Codable {
-    var text: String?
-    var type: String?
-}
-
 
 
 class ViewController: UIViewController {
 
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        }
         
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        Quick.shared.setApiBaseUrl(url: "http://51.124.79.0/")
-        Quick.shared.timeOutTime = 20
-        Quick.shared.showLoadingInducator = true
-        Quick.shared.showResponseJSONOnConsole = true
-        Quick.shared.getRequest(endPoint: "api/", parameters: ["do":"produce/aps"], responseObject: CoreResponse<FarmerFieldEditApsModel>.self) { (res, err) in
+        
+        //Get action with response and Json
+        Quick.shared.getRequest(endPoint: "posts/", responseObject: [TestApiResponse].self) { (response, json, err) in
             if let controledError = err {
-                print(controledError.localizedDescription)
+                print(controledError)
             } else {
-
+                print(response)
             }
+        }
+
+        //Get action with response
+        Quick.shared.getRequest(endPoint: "posts/", responseObject: [TestApiResponse].self) { (response, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+
+        //Post aciton with Json Response and Json
+        Quick.shared.postRequest(url: "posts", parameters: ["title": "quickApi", "body": "quickApiBody","userId": 1], responseObject: TestApiResponse.self) { (response, json, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+
+        //Post aciton with Json Response
+        Quick.shared.postRequest(url: "posts", parameters: ["title": "quickApi", "body": "quickApiBody","userId": 1], responseObject: TestApiResponse.self) { (response, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+        
+        //Put aciton with Json Response and Json
+        Quick.shared.patchRequest(url: "posts/1", parameters: ["title": "quickApi"], responseObject: TestApiResponse.self) { (response, json, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+
+        //Put aciton with Json Response
+        Quick.shared.patchRequest(url: "posts/1", parameters: ["title": "quickApi"], responseObject: TestApiResponse.self) { (response, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+        
+        //Delete aciton with Json Response and Json
+        Quick.shared.deleteRequest(url: "posts/1", parameters: nil, responseObject: TestApiDeleteResponse.self) { (response, json, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
+
+        //Delete aciton with Json Response
+        Quick.shared.deleteRequest(url: "posts/1", parameters: nil, responseObject: TestApiDeleteResponse.self) { (response, err) in
+            if let controledError = err {
+                print(controledError)
+            } else {
+                print(response)
+            }
+        }
     }
         
         
@@ -87,12 +129,8 @@ class ViewController: UIViewController {
 //        let ar = Quick.shared.errorModel.getError(json: ["test": ["test": "asdqweasdqwe"]], statusCode: 2)
 //        print("test \(ar)")
         
-    }
+    
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
 }
 

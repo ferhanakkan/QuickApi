@@ -256,7 +256,7 @@ public class Quick {
                         switch response.result {
                         case .success(let value):
                             guard let json = try? JSONSerialization.jsonObject(with: response.data!, options: []) as? [String: Any] else {
-                                return
+                                return 
                             }
                             self.responseJson = json
                             if self.showResponseJSONOnConsole {
