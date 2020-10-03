@@ -36,12 +36,21 @@ public class Quick {
 
     public init() {
     }
-        
+    
+    struct Testasdf: Codable {
+        var a: Int
+    }
+    
+    public func testter() {
+        self.getRequest(endPoint: "q", responseObject: Testasdf) { (res, json, err) in
+            print(res)
+        }
+    }
     //MARK: Completion Converter
     
-    public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.get(url: endPoint, parameters: parameters, decodeObject: decodeObject).done { (res) in
+        self.get(url: endPoint, parameters: parameters, decodeObject: responseObject).done { (res) in
             completion(res, self.responseJson, nil)
             LoadingView.hide()
         }.catch { (err) in
@@ -50,9 +59,9 @@ public class Quick {
         }
     }
     
-    public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, decodeObject: T ,completion: @escaping (T?, Error?) -> ()) {
+    public func getRequest<T: Decodable>(endPoint: String, parameters: [String:Any]? = nil, responseObject: T ,completion: @escaping (T?, Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.get(url: endPoint, parameters: parameters, decodeObject: decodeObject).done { (res) in
+        self.get(url: endPoint, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
@@ -61,9 +70,9 @@ public class Quick {
         }
     }
     
-    public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int, size: Int, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int, size: Int, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.getPagination(url: endPoint, page: page, size: size, decodeObject: decodeObject).done { (res) in
+        self.getPagination(url: endPoint, page: page, size: size, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
         }.catch { (err) in
@@ -72,9 +81,9 @@ public class Quick {
         }
     }
     
-    public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int = 0, size: Int = 20, decodeObject: T ,completion: @escaping (T?, Error?) -> ()) {
+    public func getPaginationRequest<T: Decodable>(endPoint: String, page: Int = 0, size: Int = 20, responseObject: T ,completion: @escaping (T?, Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.getPagination(url: endPoint, page: page, size: size, decodeObject: decodeObject).done { (res) in
+        self.getPagination(url: endPoint, page: page, size: size, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
@@ -84,9 +93,9 @@ public class Quick {
     }
     
     
-    public func postRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func postRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.post(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+        self.post(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
         }.catch { (err) in
@@ -95,9 +104,9 @@ public class Quick {
         }
     }
 
-    public func postRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,Error?) -> ()) {
+    public func postRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.post(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+        self.post(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
@@ -106,9 +115,9 @@ public class Quick {
         }
     }
     
-    public func putRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func putRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.put(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+        self.put(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
         }.catch { (err) in
@@ -117,9 +126,9 @@ public class Quick {
         }
     }
 
-    public func putRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,Error?) -> ()) {
+    public func putRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.put(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+        self.put(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
@@ -128,9 +137,9 @@ public class Quick {
         }
     }
     
-    public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.patch(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+        self.patch(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
         }.catch { (err) in
@@ -139,9 +148,9 @@ public class Quick {
         }
     }
 
-    public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,Error?) -> ()) {
+    public func patchRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.patch(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+        self.patch(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in
@@ -150,9 +159,9 @@ public class Quick {
         }
     }
     
-    public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
+    public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,[String : Any] , Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.delete(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+        self.delete(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, self.responseJson, nil)
         }.catch { (err) in
@@ -161,9 +170,9 @@ public class Quick {
         }
     }
 
-    public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, decodeObject: T ,completion: @escaping (T?,Error?) -> ()) {
+    public func deleteRequest<T: Decodable>(url: String, parameters: Parameters?, responseObject: T ,completion: @escaping (T?,Error?) -> ()) {
         showLoadingInducator ? LoadingView.show() : nil
-        self.delete(url: url, parameters: parameters, decodeObject: decodeObject).done { (res) in
+        self.delete(url: url, parameters: parameters, decodeObject: responseObject).done { (res) in
             LoadingView.hide()
             completion(res, nil)
         }.catch { (err) in

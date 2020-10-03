@@ -9,7 +9,7 @@
 import UIKit
 import QuickApi
 
-struct Testasdf: Decodable {
+struct Testasdf: Codable {
     var a: Int
 }
 
@@ -19,6 +19,13 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Quick.shared.getRequest(endPoint: "a", responseObject: Testasdf) { (res, err) in
+            print(res)
+        }
+        
+        
+        
         LoadingView.show()
 //        let test = ErrorHandling()
 //        Quick.shared.errorModel.closure = { json, statusCode in
@@ -47,7 +54,6 @@ class ViewController: UIViewController {
 //        }
 //        let ar = Quick.shared.errorModel.getError(json: ["test": ["test": "asdqweasdqwe"]], statusCode: 2)
 //        print("test \(ar)")
-        
         
     }
 
