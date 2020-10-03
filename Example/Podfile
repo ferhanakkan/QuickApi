@@ -2,7 +2,8 @@ use_frameworks!
 
 target 'QuickApi_Example' do
   pod 'QuickApi', :path => '../'
-
+  pod 'Alamofire', '~> 5.2'
+  pod "PromiseKit", "~> 6.8"
   target 'QuickApi_Tests' do
     inherit! :search_paths
 

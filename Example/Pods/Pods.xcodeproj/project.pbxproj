@@ -10,7 +10,8 @@
 		050EC71FE0549234F49FB79586D6DF18 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		10E91F463D47D03DE6B61700499FE4D6 /* QuickApi-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3677C68C4004AE389AEBCBF42CFE4599 /* QuickApi-dummy.m */; };
 		2B4488BAE26B070597ADEA426F5F08D2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
-		2C88528FC80B5F1B8DA4526085D41E26 /* ReplaceMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F149E7D751A1D224EBD23D8DF4EB /* ReplaceMe.swift */; };
+		36674C8E25285F910025F7D6 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 36674C8D25285F910025F7D6 /* Resources */; };
+		36674C9B25285FD60025F7D6 /* CoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36674C9A25285FD60025F7D6 /* CoreService.swift */; };
 		7DFCD83F7436DFD45D60A19D31522CDB /* Pods-QuickApi_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CA3CEBBFF8CE1099DA241BBEEB5BEB7F /* Pods-QuickApi_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C5BA94954E910598DD220F3C70411FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		B7C071785997DBCE5845CAAD175C9D79 /* Pods-QuickApi_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D388BAA528B4DA9FCC7660C635735F25 /* Pods-QuickApi_Example-dummy.m */; };
@@ -45,6 +46,8 @@
 		21B7AA26F808DA3AA87024566E7B1323 /* Pods_QuickApi_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickApi_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23C8FD129CF6B0CC84D0B8BE3A2C8DB8 /* Pods-QuickApi_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-QuickApi_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		36674C8D25285F910025F7D6 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = QuickApi/Resources; sourceTree = "<group>"; };
+		36674C9A25285FD60025F7D6 /* CoreService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreService.swift; path = QuickApi/Classes/CoreService.swift; sourceTree = "<group>"; };
 		3677C68C4004AE389AEBCBF42CFE4599 /* QuickApi-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "QuickApi-dummy.m"; sourceTree = "<group>"; };
 		36E271F7B1116DA8D79305EB80F748C8 /* Pods-QuickApi_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-QuickApi_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		3EF44D1BAB4D8D5C1F5489F8CA38ABC4 /* Pods-QuickApi_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-QuickApi_Example-Info.plist"; sourceTree = "<group>"; };
@@ -56,7 +59,6 @@
 		733272FCE2D75A05B630E61877869697 /* Pods_QuickApi_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickApi_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		827C29CB3647B5BC48CB5DDDA36AA02B /* QuickApi-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "QuickApi-Info.plist"; sourceTree = "<group>"; };
 		8B299DF83D5DDF706018B7B2053003B6 /* Pods-QuickApi_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-QuickApi_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		8B91F149E7D751A1D224EBD23D8DF4EB /* ReplaceMe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReplaceMe.swift; path = QuickApi/Classes/ReplaceMe.swift; sourceTree = "<group>"; };
 		8E6800527472C1C50C2EAE5F69EC6596 /* QuickApi-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "QuickApi-umbrella.h"; sourceTree = "<group>"; };
 		9A06BA1D41D56FC3C2E09AE51E37B331 /* Pods-QuickApi_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-QuickApi_Example.release.xcconfig"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -118,7 +120,8 @@
 		70DDFC346B6889DC72C375563FA385D9 /* QuickApi */ = {
 			isa = PBXGroup;
 			children = (
-				8B91F149E7D751A1D224EBD23D8DF4EB /* ReplaceMe.swift */,
+				36674C9A25285FD60025F7D6 /* CoreService.swift */,
+				36674C8D25285F910025F7D6 /* Resources */,
 				90233E5B701A2810632D807CB7B24049 /* Pod */,
 				49DCC0D4F0A1B7B1D0F571B60DB0A7C9 /* Support Files */,
 			);
@@ -355,6 +358,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36674C8E25285F910025F7D6 /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,8 +391,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36674C9B25285FD60025F7D6 /* CoreService.swift in Sources */,
 				10E91F463D47D03DE6B61700499FE4D6 /* QuickApi-dummy.m in Sources */,
-				2C88528FC80B5F1B8DA4526085D41E26 /* ReplaceMe.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,6 +496,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 63D07A54C5E8B5FDCBA782441D31E1DB /* QuickApi.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -559,6 +564,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0FE8EE2998950900833EF5E9A794C08B /* QuickApi.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -580,6 +586,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
