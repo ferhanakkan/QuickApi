@@ -42,7 +42,7 @@
 		607FACE51AFB9204008FA782 /* QuickApi_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickApi_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		72F016E0C7B7AFCB088AE3D0 /* QuickApi.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = QuickApi.podspec; path = ../QuickApi.podspec; sourceTree = "<group>"; };
+		72F016E0C7B7AFCB088AE3D0 /* QuickApi.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = QuickApi.podspec; path = ../QuickApi.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		903E21483FEB7732F348494F /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		C951D2E8ABA86898DBB87B67 /* Pods_QuickApi_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuickApi_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA7AFF79F54160C912AE8FEE /* Pods-QuickApi_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuickApi_Example.debug.xcconfig"; path = "Target Support Files/Pods-QuickApi_Example/Pods-QuickApi_Example.debug.xcconfig"; sourceTree = "<group>"; };
