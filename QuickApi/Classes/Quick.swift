@@ -8,19 +8,20 @@
 import Alamofire
 import PromiseKit
 
-class FA {
+public class Quick {
     
+    public var shared = Quick()
 
     public var timeOutTime = 0 {
         didSet {
-            configuration.timeoutIntervalForRequest = 25
-            configuration.timeoutIntervalForResource = 25
+            configuration.timeoutIntervalForRequest = Double(timeOutTime)
+            configuration.timeoutIntervalForResource = Double(timeOutTime)
             sessionManager = Alamofire.Session(configuration: configuration)
         }
     }
     
     public var acceptLanguageCode = ""
-    public var showResponseOnConsole = false
+    public var showResponseJSONOnConsole = false
     
     private var endPoint: String = ""
     private var baseApiUrl = ""
@@ -30,7 +31,7 @@ class FA {
     private var sessionManager: Session?
     private let configuration = URLSessionConfiguration.default
 
-    init() {
+    public init() {
         
     }
     
@@ -206,7 +207,7 @@ class FA {
                                 return
                             }
                             self.responseJson = json
-                            if self.showResponseOnConsole {
+                            if self.showResponseJSONOnConsole {
                                 print("QuickApi response : \(json)")
                             }
                             seal.fulfill(value)
@@ -222,7 +223,7 @@ class FA {
                             }
                             
                             self.responseJson = json
-                            if self.showResponseOnConsole {
+                            if self.showResponseJSONOnConsole {
                                 print("QuickApi response : \(json)")
                             }
                             
@@ -235,7 +236,7 @@ class FA {
                             seal.reject(error)
                         }
                     } else {
-                        print("response nil non value \(String(describing: response.error?.localizedDescription))")
+                        print("QuickApi response nil \(String(describing: response.error?.localizedDescription))")
                         seal.reject(response.error!)
                     }
                 }
@@ -276,7 +277,7 @@ class FA {
                             return
                         }
                         self.responseJson = json
-                        if self.showResponseOnConsole {
+                        if self.showResponseJSONOnConsole {
                             print("QuickApi response : \(json)")
                         }
                         seal.fulfill(value)
@@ -291,7 +292,7 @@ class FA {
                             return
                         }
                         self.responseJson = json
-                        if self.showResponseOnConsole {
+                        if self.showResponseJSONOnConsole {
                             print("QuickApi response : \(json)")
                         }
                         
@@ -303,7 +304,9 @@ class FA {
 //                        }
                         seal.reject(error)
                     }
+                    print("QuickApi response nil \(String(describing: response.error?.localizedDescription))")
                 } else {
+                    print("QuickApi response nil \(String(describing: response.error?.localizedDescription))")
                     seal.reject(response.error!)
                 }
 
@@ -316,7 +319,7 @@ class FA {
     
     //MARK: - Actions
     
-    private func getPagination<T:Decodable>(url: String, page: Int = 0, size: Int = 20, decodeObject: T) -> Promise<T> {
+    private func getPagination<T:Decodable>(url: String, page: Int, size: Int, decodeObject: T) -> Promise<T> {
         endPoint = baseApiUrl+url
         return self.request(fullUrl: endPoint, method: .get, parameters: ["page":page, "size": size])
     }

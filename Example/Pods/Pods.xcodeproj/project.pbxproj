@@ -91,7 +91,7 @@
 		D31FC7FDD450C4CDD633ECBAD27C6221 /* URLEncodedFormEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97D54BBBF6CEC1C1A90BD979089BA1E /* URLEncodedFormEncoder.swift */; };
 		D4C52546E7DEE38CEE04F2B6D61BB9E2 /* fwd.h in Headers */ = {isa = PBXBuildFile; fileRef = 32AB97BD28581281A359AEF445BEFB48 /* fwd.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D5EAAFB6FAD77A8F0699345149BA3CBB /* URLRequest+Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73B34CE15644D79A67CCBB2132587E9 /* URLRequest+Alamofire.swift */; };
-		DAD5E722D36520C03EA8FF06C1103E47 /* FA.swift in Sources */ = {isa = PBXBuildFile; fileRef = B180FCA5E05BC5C4F9F30BFC2A39E8DD /* FA.swift */; };
+		DAD5E722D36520C03EA8FF06C1103E47 /* Quick.swift in Sources */ = {isa = PBXBuildFile; fileRef = B180FCA5E05BC5C4F9F30BFC2A39E8DD /* Quick.swift */; };
 		DBEF0F49E57B3321CC7067EEF33AB582 /* NSNotificationCenter+AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = D2AEDD95D240CF90D1AC3AABFB1D2959 /* NSNotificationCenter+AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DC627AFC5B585686898B014184AFCABD /* AuthenticationInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CF2BAAADBD84425DD818985F9BA8F9 /* AuthenticationInterceptor.swift */; };
 		DCCBAC3CA5FF72DB6859804B355E0AC8 /* Pods-QuickApi_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 529D466F598F40C0015BD90EEAE893CA /* Pods-QuickApi_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -256,7 +256,7 @@
 		ADD06D97A4C4D0B145F12EB108385E38 /* AlamofireExtended.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AlamofireExtended.swift; path = Source/AlamofireExtended.swift; sourceTree = "<group>"; };
 		AF1F123BA5A1FD167129E9A3346F1D7C /* afterlife.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = afterlife.swift; path = Extensions/Foundation/Sources/afterlife.swift; sourceTree = "<group>"; };
 		B0B3ECF894D9751484CEA20765C2A97C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		B180FCA5E05BC5C4F9F30BFC2A39E8DD /* FA.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FA.swift; path = QuickApi/Classes/FA.swift; sourceTree = "<group>"; };
+		B180FCA5E05BC5C4F9F30BFC2A39E8DD /* Quick.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Quick.swift; path = QuickApi/Classes/Quick.swift; sourceTree = "<group>"; };
 		B50A7FA89394961AE7EBB8522E9F6095 /* Pods-QuickApi_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-QuickApi_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		B73B34CE15644D79A67CCBB2132587E9 /* URLRequest+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "URLRequest+Alamofire.swift"; path = "Source/URLRequest+Alamofire.swift"; sourceTree = "<group>"; };
 		BDF7F9485569DC570DB3D826268E06FC /* NSNotificationCenter+Promise.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSNotificationCenter+Promise.swift"; path = "Extensions/Foundation/Sources/NSNotificationCenter+Promise.swift"; sourceTree = "<group>"; };
@@ -430,7 +430,7 @@
 		595A4B2145C1087A717813A3E2069834 /* QuickApi */ = {
 			isa = PBXGroup;
 			children = (
-				B180FCA5E05BC5C4F9F30BFC2A39E8DD /* FA.swift */,
+				B180FCA5E05BC5C4F9F30BFC2A39E8DD /* Quick.swift */,
 				53C72169B1B2A62D9CFFC0189C85A3C1 /* Pod */,
 				387160805BB05B0B00A8C8C8250CB940 /* Resources */,
 				B95BABDEA695C4F6DA3400056100A99F /* Support Files */,
@@ -911,7 +911,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAD5E722D36520C03EA8FF06C1103E47 /* FA.swift in Sources */,
+				DAD5E722D36520C03EA8FF06C1103E47 /* Quick.swift in Sources */,
 				F237B4FABD22C02843EF8920920915EE /* QuickApi-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

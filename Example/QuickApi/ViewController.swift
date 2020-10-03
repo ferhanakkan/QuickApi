@@ -9,10 +9,8 @@
 import UIKit
 import QuickApi
 
-
-
 class ViewController: UIViewController {
-    
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
