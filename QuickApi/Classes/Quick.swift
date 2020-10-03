@@ -35,6 +35,10 @@ public class Quick {
     private let configuration = URLSessionConfiguration.default
 
     public init() {
+        
+        if let preSelectedLanguage = UserDefaults.standard.value(forKey: "langCodeFA") as? String {
+            acceptLanguageCode = preSelectedLanguage
+        }
     }
 
     //MARK: Completion Converter
@@ -183,6 +187,16 @@ public class Quick {
     public func setToken(token: String) {
         let userDefaults = UserDefaults.standard
         userDefaults.setValue(token, forKey: "tokenFA")
+    }
+
+    public func setAcceptlanguage(code: String) {
+        let userDefaults = UserDefaults.standard
+        userDefaults.setValue(code, forKey: "langCodeFA")
+    }
+    
+    public func clearAcceptLanguage() {
+        let userDefaults = UserDefaults.standard
+        userDefaults.setValue(nil, forKey: "langCodeFA")
     }
     
     public func setApiBaseUrl(url: String) {
