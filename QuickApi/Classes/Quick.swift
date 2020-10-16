@@ -25,6 +25,9 @@ public class Quick {
     public var showResponseJSONOnConsole = false
     public var customErrorModel = false
     public var showLoadingIndicator = false
+    public var showAlertMessageInError = false
+    public var messageTitle = "Error"
+    public var buttonTitle = "Ok"
     
     private var endPoint: String = ""
     private var baseApiUrl = ""
@@ -287,6 +290,11 @@ public class Quick {
                                 if let code = response.response?.statusCode {
                                     if let errorString = ErrorHandling().getError(json: json, statusCode: code) {
                                         let error = NSError(domain:"", code:code, userInfo:[ NSLocalizedDescriptionKey: errorString]) as Error
+                                        if self.showAlertMessageInError {
+                                            let action = UIAlertAction(title: self.buttonTitle, style: .default) { (_) in
+                                            }
+                                            AlertMessage.messagePresent(title: self.messageTitle, message: error.localizedDescription, moreButtonAction: nil, firstAlertAction: action)
+                                        }
                                         seal.reject(error)
                                     }
                                 }
@@ -359,15 +367,32 @@ public class Quick {
                             if let code = response.response?.statusCode {
                                 if let errorString = ErrorHandling().getError(json: json, statusCode: code) {
                                     let error = NSError(domain:"", code:code, userInfo:[ NSLocalizedDescriptionKey: errorString]) as Error
+                                    if self.showAlertMessageInError {
+                                        let action = UIAlertAction(title: self.buttonTitle, style: .default) { (_) in
+                                        }
+                                        AlertMessage.messagePresent(title: self.messageTitle, message: error.localizedDescription, moreButtonAction: nil, firstAlertAction: action)
+                                    }
                                     seal.reject(error)
                                 }
                             }
                         }
+                        if self.showAlertMessageInError {
+                            let action = UIAlertAction(title: self.buttonTitle, style: .default) { (_) in
+                            }
+                            AlertMessage.messagePresent(title: self.messageTitle, message: error.localizedDescription, moreButtonAction: nil, firstAlertAction: action)
+                        }
+
                         seal.reject(error)
                     }
                     print("QuickApi response nil \(String(describing: response.error?.localizedDescription))")
                 } else {
                     print("QuickApi response nil \(String(describing: response.error?.localizedDescription))")
+                    if self.showAlertMessageInError {
+                        let action = UIAlertAction(title: self.buttonTitle, style: .default) { (_) in
+                        }
+                        AlertMessage.messagePresent(title: self.messageTitle, message: response.error!.localizedDescription, moreButtonAction: nil, firstAlertAction: action)
+                    }
+                    
                     seal.reject(response.error!)
                 }
 

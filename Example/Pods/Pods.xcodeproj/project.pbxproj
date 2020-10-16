@@ -33,6 +33,8 @@
 		36674CDF2528A0E00025F7D6 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36674CDD2528A0E00025F7D6 /* LoadingView.swift */; };
 		36674CE02528A0E00025F7D6 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36674CDE2528A0E00025F7D6 /* UIView+Extension.swift */; };
 		36674D1A2529115D0025F7D6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36674D192529115D0025F7D6 /* Constants.swift */; };
+		36962B7A253A061C001D469F /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36962B78253A061C001D469F /* UIApplication+Extension.swift */; };
+		36962B7B253A061C001D469F /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36962B79253A061C001D469F /* AlertMessage.swift */; };
 		37018D3DC554A00E9B3E306A28296316 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A08F3974032EC137AD86FC078A3BF6 /* Error.swift */; };
 		381FF05F8B4F611EE9C2FDBE4457BB89 /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB891497B16A7B9EC88BD9871503020 /* SessionDelegate.swift */; };
 		3AAE347ADDFEFAC7DDECBC744D1BD6AC /* NSTask+AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 359C5273608FC4A0AEE41E98DF897FA2 /* NSTask+AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -195,6 +197,8 @@
 		36674CDD2528A0E00025F7D6 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingView.swift; path = QuickApi/Classes/LoadingView.swift; sourceTree = "<group>"; };
 		36674CDE2528A0E00025F7D6 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Extension.swift"; path = "QuickApi/Classes/UIView+Extension.swift"; sourceTree = "<group>"; };
 		36674D192529115D0025F7D6 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = QuickApi/Classes/Constants.swift; sourceTree = "<group>"; };
+		36962B78253A061C001D469F /* UIApplication+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIApplication+Extension.swift"; path = "QuickApi/Classes/UIApplication+Extension.swift"; sourceTree = "<group>"; };
+		36962B79253A061C001D469F /* AlertMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlertMessage.swift; path = QuickApi/Classes/AlertMessage.swift; sourceTree = "<group>"; };
 		36E271F7B1116DA8D79305EB80F748C8 /* Pods-QuickApi_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-QuickApi_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		36F43B1727BE6119E17C9241A22AAF67 /* AnyPromise.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AnyPromise.m; path = Sources/AnyPromise.m; sourceTree = "<group>"; };
 		39206B7666CB82ED7C79007A01F8C9E6 /* UIView+Promise.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIView+Promise.swift"; path = "Extensions/UIKit/Sources/UIView+Promise.swift"; sourceTree = "<group>"; };
@@ -438,6 +442,8 @@
 		595A4B2145C1087A717813A3E2069834 /* QuickApi */ = {
 			isa = PBXGroup;
 			children = (
+				36962B79253A061C001D469F /* AlertMessage.swift */,
+				36962B78253A061C001D469F /* UIApplication+Extension.swift */,
 				36674D192529115D0025F7D6 /* Constants.swift */,
 				36674CDD2528A0E00025F7D6 /* LoadingView.swift */,
 				36674CDE2528A0E00025F7D6 /* UIView+Extension.swift */,
@@ -925,10 +931,12 @@
 			files = (
 				36674CE02528A0E00025F7D6 /* UIView+Extension.swift in Sources */,
 				36674CC925288E3A0025F7D6 /* ErrorHandling.swift in Sources */,
+				36962B7B253A061C001D469F /* AlertMessage.swift in Sources */,
 				36674CDF2528A0E00025F7D6 /* LoadingView.swift in Sources */,
 				DAD5E722D36520C03EA8FF06C1103E47 /* Quick.swift in Sources */,
 				F237B4FABD22C02843EF8920920915EE /* QuickApi-dummy.m in Sources */,
 				36674D1A2529115D0025F7D6 /* Constants.swift in Sources */,
+				36962B7A253A061C001D469F /* UIApplication+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
