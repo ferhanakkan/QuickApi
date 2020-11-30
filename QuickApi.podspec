@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'QuickApi'
-  s.version          = '0.1.4'
+  s.version          = '0.1.5'
   s.summary          = 'QuickApi is a easiest solution for your network layer. You can do your requests just in one line of code.'
 
   s.description      = <<-DESC
