@@ -7,7 +7,7 @@ let package = Package(
   name: "QuickApi",
   platforms: [
     // Add support for all platforms starting from a specific version.
-    //    .macOS(.v10_15),
+    .macOS(.v10_15),
     .iOS(.v11),
     //    .watchOS(.v5),
     //    .tvOS(.v11)
@@ -26,7 +26,7 @@ let package = Package(
     // Targets can depend on other targets in this package, and on products in packages this package depends on.
     .target(
       name: "QuickApi",
-      dependencies: []),
+      dependencies: ["Alamofire"]),
   ],
   swiftLanguageVersions: [
     .v5
