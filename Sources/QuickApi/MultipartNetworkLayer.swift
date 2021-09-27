@@ -40,7 +40,7 @@ extension MultipartNetworkLayer {
                                     parameters: [String: Any],
                                     datas: [MultipartDataModel],
                                     decodeObject: T.Type,
-                                    completion: @escaping (Result<T,AFError>) -> ()) {
+                                    completion: @escaping GenericCompletion<T>) {
     
     guard let sessionManager = sessionManager else {
       print("Session Manager Issue detected.")
@@ -72,16 +72,15 @@ extension MultipartNetworkLayer {
         return
       }
       
-      guard let responseModel = try? JSONSerialization.jsonObject(with: data, options: []) as? T else {
+      guard let responseModel = try? JSONDecoder().decode(T.self, from: data) else {
         if let error = response.error { completion(.failure(error)) }
         return
       }
       
-      #warning("status kodlarını düzenle!!!")
       if let statusCode = response.response?.statusCode {
         switch statusCode {
         case 300...599:
-          print("asd")
+          completion(.failure(response.error!))
         case 200...299:
           completion(.success(responseModel))
         default:
@@ -96,29 +95,27 @@ extension MultipartNetworkLayer {
 
 extension MultipartNetworkLayer {
   
-    func callRequest<T: Decodable>(fullUrl: String,
-                                   header: HTTPHeaders,
-                                   method: HTTPMethod,
-                                   parameters: [String: Any],
-                                   datas: [MultipartDataModel],
-                                   decodeObject: T.Type,
-                                   completionSuccess: @escaping (T) -> (),
-                                   completionError: @escaping (AFError) -> ()) {
-      
-      upload(fullUrl: fullUrl,
-             header: header,
-             method: method,
-             parameters: parameters,
-             datas: datas,
-             decodeObject: decodeObject) { result in
-        switch result {
-        case .success(let data):
-          completionSuccess(data)
-        case .failure(let error):
-          completionError(error)
-        }
+  func callRequest<T: Decodable>(fullUrl: String,
+                                 header: HTTPHeaders,
+                                 method: HTTPMethod,
+                                 parameters: [String: Any],
+                                 datas: [MultipartDataModel],
+                                 decodeObject: T.Type,
+                                 completion: @escaping GenericCompletion<T>) {
+    upload(fullUrl: fullUrl,
+           header: header,
+           method: method,
+           parameters: parameters,
+           datas: datas,
+           decodeObject: decodeObject) { result in
+      switch result {
+      case .success(let data):
+        completion(.success(data))
+      case .failure(let error):
+        completion(.failure(error))
       }
     }
+  }
 }
 
 // MARK: - Logic

@@ -10,6 +10,8 @@
 import Foundation
 import Alamofire
 
+public typealias GenericCompletion<T: Decodable> = (Result<T,AFError>) -> ()
+
 public final class Quick {
   
   public static var shared = Quick()
@@ -28,21 +30,19 @@ public final class Quick {
 extension Quick {
   
   public func uploadMultipart<T: Decodable>(fullUrl: String,
-                              header: HTTPHeaders,
-                              method: HTTPMethod,
-                              parameters: [String: Any],
-                              datas: [MultipartDataModel],
-                              decodeObject: T.Type,
-                              completionSuccess: @escaping (T) -> (),
-                              completionError: @escaping (AFError) -> ()) {
+                                            header: HTTPHeaders,
+                                            method: HTTPMethod,
+                                            parameters: [String: Any],
+                                            datas: [MultipartDataModel],
+                                            decodeObject: T.Type,
+                                            completion: @escaping GenericCompletion<T>) {
     multipartNetworkLayer.callRequest(fullUrl: fullUrl,
                                       header: header,
                                       method: method,
                                       parameters: parameters,
                                       datas: datas,
                                       decodeObject: decodeObject,
-                                      completionSuccess: completionSuccess,
-                                      completionError: completionError)
+                                      completion: completion)
   }
 }
 
@@ -51,19 +51,19 @@ extension Quick {
 extension Quick {
   
   public func clearToken() {
-      userDefaults.setValue(nil, forKey: Constants.token)
+    userDefaults.setValue(nil, forKey: Constants.token)
   }
   
   public func setToken(token: String) {
-      userDefaults.setValue(token, forKey: Constants.token)
+    userDefaults.setValue(token, forKey: Constants.token)
   }
-
+  
   public func setAcceptlanguage(code: String) {
-      userDefaults.setValue(code, forKey: Constants.languageCode)
+    userDefaults.setValue(code, forKey: Constants.languageCode)
   }
   
   public func clearAcceptLanguage() {
-      userDefaults.setValue(nil, forKey: Constants.languageCode)
+    userDefaults.setValue(nil, forKey: Constants.languageCode)
   }
   
   public func setBaseUrl(_ url: String) {
@@ -84,24 +84,24 @@ extension Quick {
 
 extension Quick {
   
-  func get<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completionSuccess: @escaping (T) -> (), completionError: @escaping (AFError) -> ()) {
-    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .get, completionSuccess: completionSuccess, completionError: completionError)
+  func get<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completion: @escaping GenericCompletion<T>) {
+    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .get, completion: completion)
   }
   
-  func post<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completionSuccess: @escaping (T) -> (), completionError: @escaping (AFError) -> ()) {
-    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .post, completionSuccess: completionSuccess, completionError: completionError)
+  func post<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completion: @escaping GenericCompletion<T>) {
+    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .post, completion: completion)
   }
-
-  func put<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completionSuccess: @escaping (T) -> (), completionError: @escaping (AFError) -> ()) {
-    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .put, completionSuccess: completionSuccess, completionError: completionError)
+  
+  func put<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completion: @escaping GenericCompletion<T>) {
+    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .put, completion: completion)
   }
-
-  func patch<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completionSuccess: @escaping (T) -> (), completionError: @escaping (AFError) -> ()) {
-    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .patch, completionSuccess: completionSuccess, completionError: completionError)
+  
+  func patch<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completion: @escaping GenericCompletion<T>) {
+    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .patch, completion: completion)
   }
-
-  func delete<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completionSuccess: @escaping (T) -> (), completionError: @escaping (AFError) -> ()) {
-    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .delete, completionSuccess: completionSuccess, completionError: completionError)
+  
+  func delete<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completion: @escaping GenericCompletion<T>) {
+    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .delete, completion: completion)
   }
 }
 

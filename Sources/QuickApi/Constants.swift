@@ -11,4 +11,5 @@ struct Constants {
   
   static let token = "quickToken"
   static let languageCode = "quickLanguageCode"
+  static let customHttpHeader = "httpHeader"
 }

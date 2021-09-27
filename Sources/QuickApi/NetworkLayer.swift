@@ -36,6 +36,10 @@ final class NetworkLayer {
   private var showResponseInConsole: Bool = false
   
   private var customErrorModel: Bool = false
+  
+  init() {
+    getCustomHttpHeader()
+  }
 }
 
 
@@ -43,7 +47,11 @@ final class NetworkLayer {
 
 extension NetworkLayer {
   
-  public func request<T: Decodable>(fullUrl: String, method: HTTPMethod, parameters: Parameters?, decodeObject: T.Type, completion: @escaping (Result<T,AFError>) -> ()) {
+  public func request<T: Decodable>(fullUrl: String,
+                                    method: HTTPMethod,
+                                    parameters: Parameters?,
+                                    decodeObject: T.Type,
+                                    completion: @escaping GenericCompletion<T>) {
     
     let encodingType = getEncodingType(method: method)
     let httpHeader = getHeader()
@@ -60,18 +68,35 @@ extension NetworkLayer {
         
         self?.showJsonResponse(response.data)
         
-        guard let data = response.data else {
-          print("QuickApi has decoding failure.")
-          if let error = response.error { completion(.failure(error)) }
-          return
+        switch response.result {
+        case .success(let data):
+          break
+        case .failure(let error):
+          break
         }
         
-        guard let responseModel = try? JSONSerialization.jsonObject(with: data, options: []) as? T else {
-          if let error = response.error { completion(.failure(error)) }
-          return
-        }
-        
-        completion(.success(responseModel))
+//        guard let data = response.data else {
+//          print("QuickApi has decoding failure.")
+//          if let error = response.error { completion(.failure(error)) }
+//          return
+//        }
+//
+//        guard let responseModel = try? JSONDecoder().decode(T.self, from: data) else {
+//          print("QuickApi has decoding failure.")
+//          if let error = response.error { completion(.failure(error)) }
+//          return
+//        }
+//
+//        if let statusCode = response.response?.statusCode {
+//          switch statusCode {
+//          case 300...599:
+//            completion(.failure(response.error!))
+//          case 200...299:
+//            completion(.success(responseModel))
+//          default:
+//            break
+//          }
+//        }
       }
   }
 }
@@ -80,19 +105,22 @@ extension NetworkLayer {
 
 extension NetworkLayer {
   
-  func callRequest<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, method: HTTPMethod, completionSuccess: @escaping (T) -> (), completionError: @escaping (AFError) -> ()) {
+  func callRequest<T: Decodable>(url: String,
+                                 parameters: Parameters? = nil,
+                                 decodeObject: T.Type,
+                                 method: HTTPMethod,
+                                 completion: @escaping GenericCompletion<T>) {
     let fullUrl = baseApiUrl ?? "" + url
     request(fullUrl: fullUrl, method: method, parameters: parameters, decodeObject: decodeObject) { result in
       switch result {
       case .success(let data):
-        completionSuccess(data)
+        completion(.success(data))
       case .failure(let error):
-        completionError(error)
+        completion(.failure(error))
       }
     }
   }
 }
-
 
 // MARK: - Logic
 
@@ -102,12 +130,20 @@ extension NetworkLayer {
     baseApiUrl = url
   }
   
+  private func getCustomHttpHeader() {
+    if let header = UserDefaults.standard.value(forKey: Constants.customHttpHeader) as? HTTPHeaders {
+      customHttpHeader = header
+    }
+  }
+  
   func setCustomHttpHeader(_ header: HTTPHeaders) {
     customHttpHeader = header
+    UserDefaults.standard.setValue(header, forKey: Constants.customHttpHeader)
   }
   
   func clearCustomHttpHeader() {
     customHttpHeader = nil
+    UserDefaults.standard.setValue(nil, forKey: Constants.customHttpHeader)
   }
   
   func cancelAllRequests() {
@@ -122,6 +158,7 @@ extension NetworkLayer {
     if let customHttpHeader = customHttpHeader {
       return customHttpHeader
     }
+    
     let userDefaults = UserDefaults.standard
     if let token: String = userDefaults.value(forKey: Constants.token) as? String {
       return  ["Authorization": "Bearer \(token)",
@@ -152,5 +189,3 @@ extension NetworkLayer {
   }
 }
 #endif
-
-
