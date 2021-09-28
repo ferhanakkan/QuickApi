@@ -84,24 +84,24 @@ extension Quick {
 
 extension Quick {
   
-  func get<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completion: @escaping GenericCompletion<T>) {
-    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .get, completion: completion)
+  func get<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, retryCount: Int? ,completion: @escaping GenericCompletion<T>) {
+    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .get, completion: completion, retryCount: retryCount)
   }
   
-  func post<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completion: @escaping GenericCompletion<T>) {
-    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .post, completion: completion)
+  func post<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, retryCount: Int? ,completion: @escaping GenericCompletion<T>) {
+    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .post, completion: completion, retryCount: retryCount)
   }
   
-  func put<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completion: @escaping GenericCompletion<T>) {
-    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .put, completion: completion)
+  func put<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, retryCount: Int? ,completion: @escaping GenericCompletion<T>) {
+    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .put, completion: completion, retryCount: retryCount)
   }
   
-  func patch<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completion: @escaping GenericCompletion<T>) {
-    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .patch, completion: completion)
+  func patch<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, retryCount: Int? ,completion: @escaping GenericCompletion<T>) {
+    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .patch, completion: completion, retryCount: retryCount)
   }
   
-  func delete<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, completion: @escaping GenericCompletion<T>) {
-    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .delete, completion: completion)
+  func delete<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, retryCount: Int? ,completion: @escaping GenericCompletion<T>) {
+    networkLayer.callRequest(url: url, parameters: parameters, decodeObject: decodeObject, method: .delete, completion: completion, retryCount: retryCount)
   }
 }
 

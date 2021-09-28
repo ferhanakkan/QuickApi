@@ -16,7 +16,7 @@ final class NetworkLayer {
   private let configuration = URLSessionConfiguration.default
   private var sessionManager: Session?
   
-  #warning("Repeat eklenecek")
+  private var maxRetryCount: Int?
   
   /// This parameter sets requests time out.
   private var requestTimeOut = 0 {
@@ -51,6 +51,7 @@ extension NetworkLayer {
                                     method: HTTPMethod,
                                     parameters: Parameters?,
                                     decodeObject: T.Type,
+                                    retryCount: Int?,
                                     completion: @escaping GenericCompletion<T>) {
     
     let encodingType = getEncodingType(method: method)
@@ -68,35 +69,56 @@ extension NetworkLayer {
         
         self?.showJsonResponse(response.data)
         
-        switch response.result {
-        case .success(let data):
-          break
-        case .failure(let error):
-          break
-        }
+        let maxRetryCount = retryCount == nil ? (self?.maxRetryCount ?? 1) : retryCount
+        var retryCounter = 1
         
-//        guard let data = response.data else {
-//          print("QuickApi has decoding failure.")
-//          if let error = response.error { completion(.failure(error)) }
-//          return
-//        }
-//
-//        guard let responseModel = try? JSONDecoder().decode(T.self, from: data) else {
-//          print("QuickApi has decoding failure.")
-//          if let error = response.error { completion(.failure(error)) }
-//          return
-//        }
-//
-//        if let statusCode = response.response?.statusCode {
-//          switch statusCode {
-//          case 300...599:
-//            completion(.failure(response.error!))
-//          case 200...299:
-//            completion(.success(responseModel))
-//          default:
-//            break
-//          }
-//        }
+        switch response.result {
+        case .success( _):
+          
+          guard let data = response.data else {
+            print("QuickApi has decoding failure.")
+            if let error = response.error { completion(.failure(error)) }
+            return
+          }
+          
+          guard let responseModel = try? JSONDecoder().decode(T.self, from: data) else {
+            print("QuickApi has decoding failure.")
+            if let error = response.error { completion(.failure(error)) }
+            return
+          }
+          
+          if let statusCode = response.response?.statusCode {
+            switch statusCode {
+            case 200...299:
+              completion(.success(responseModel))
+              
+            case 401:
+              break
+              
+            case 300...599:
+              completion(.failure(response.error!))
+            default:
+              break
+            }
+          }
+          
+        case .failure(let error):
+          if maxRetryCount == retryCounter {
+            print("***************** Internet connection error. Failed with many retry attempts. ***********************")
+            completion(.failure(error))
+          } else {
+            print("***************** Internet connection error. Going to retry with #: \((retryCount ?? 0 )+1) *****************")
+            DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
+              retryCounter += 1
+              self?.request(fullUrl: fullUrl,
+                            method: method,
+                            parameters: parameters,
+                            decodeObject: decodeObject,
+                            retryCount: retryCount,
+                            completion: completion)
+            }
+          }
+        }
       }
   }
 }
@@ -109,16 +131,10 @@ extension NetworkLayer {
                                  parameters: Parameters? = nil,
                                  decodeObject: T.Type,
                                  method: HTTPMethod,
-                                 completion: @escaping GenericCompletion<T>) {
+                                 completion: @escaping GenericCompletion<T>,
+                                 retryCount: Int?) {
     let fullUrl = baseApiUrl ?? "" + url
-    request(fullUrl: fullUrl, method: method, parameters: parameters, decodeObject: decodeObject) { result in
-      switch result {
-      case .success(let data):
-        completion(.success(data))
-      case .failure(let error):
-        completion(.failure(error))
-      }
-    }
+    request(fullUrl: fullUrl, method: method, parameters: parameters, decodeObject: decodeObject, retryCount: retryCount, completion: completion)
   }
 }
 
