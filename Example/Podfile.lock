@@ -1,0 +1,23 @@
+PODS:
+  - Alamofire (5.4.4)
+  - QuickApi (1.0.0):
+    - Alamofire (~> 5.4.0)
+
+DEPENDENCIES:
+  - QuickApi (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+
+EXTERNAL SOURCES:
+  QuickApi:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
+  QuickApi: 5d05c56851780505e08ef40d91e3138e270a08f6
+
+PODFILE CHECKSUM: 8e523940fac79e12246b28b5b7f9791c7e17136e
+
+COCOAPODS: 1.10.1
