@@ -18,6 +18,6 @@ Pod::Spec.new do |s|
       "ios": "11.0"
   }
 
-  s.source_files = 'Sources/QuickQpi/**/*'
+  s.source_files = 'Sources/QuickApi/**/*'
   s.dependency 'Alamofire', '~> 5.4.0'
 end
