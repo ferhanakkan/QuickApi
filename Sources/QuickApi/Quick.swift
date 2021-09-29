@@ -24,6 +24,11 @@ public final class Quick {
 
 extension Quick {
   
+  public func cancelAllRequests() {
+    networkLayer.cancelAllRequests()
+    multipartNetworkLayer.cancelAllRequests()
+  }
+  
   public func showResponseInDebug(_ isEnable: Bool) {
     networkLayer.showResponseInDebug(isEnable)
   }
@@ -56,12 +61,20 @@ extension Quick {
     networkLayer.headerCompletion = completion
   }
   
-  public func authCaller(completion: @escaping () -> ()) {
-    networkLayer.authCompletion = completion
+  public func setUnauthorized(completion: @escaping UnauthorizedCompletion) {
+    networkLayer.unauthorizedCompletion = completion
   }
   
   public func retryAfterUnauthStatus() {
     networkLayer.retryCompletion?()
+  }
+  
+  public func setUnauthorizedForMultipart(completion: @escaping UnauthorizedCompletion) {
+    multipartNetworkLayer.unauthorizedCompletion = completion
+  }
+  
+  public func retryAfterUnauthStatusForMultipart() {
+    multipartNetworkLayer.retryCompletion?()
   }
 }
 

@@ -12,6 +12,7 @@ import Alamofire
 import Foundation
 
 public typealias HttpHeaderCompletion = ((ApiTypes)->(HTTPHeaders))
+public typealias UnauthorizedCompletion = ((ApiTypes)->())
 
 final class NetworkLayer {
   
@@ -24,7 +25,7 @@ final class NetworkLayer {
   private var showResponseInConsole: Bool = false
   
   var headerCompletion: HttpHeaderCompletion?
-  var authCompletion: (() -> ())?
+  var unauthorizedCompletion: UnauthorizedCompletion?
   var retryCompletion: (() -> ())?
   
   var authTriggered: Bool = false

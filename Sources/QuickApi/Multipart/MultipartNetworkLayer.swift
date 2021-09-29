@@ -20,7 +20,7 @@ final class MultipartNetworkLayer {
   private var customHttpHeader: HTTPHeaders?
   private var showResponseInConsole: Bool = false
   
-  var authCompletion: (() -> ())?
+  var unauthorizedCompletion: UnauthorizedCompletion?
   var retryCompletion: (() -> ())?
   
   var authTriggered: Bool = false
