@@ -21,7 +21,6 @@ final class NetworkLayer {
   private let configuration = URLSessionConfiguration.default
   private var sessionManager: Session?
   
-  private var customHttpHeader: HTTPHeaders?
   private var showResponseInConsole: Bool = false
   
   var headerCompletion: HttpHeaderCompletion?
