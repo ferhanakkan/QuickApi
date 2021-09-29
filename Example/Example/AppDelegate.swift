@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import QuickApi
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window?.rootViewController = UIViewController()
     window?.makeKeyAndVisible()
     return true
+  }
+  
+  private func setQuickApi() {
+    Quick.shared.setBaseUrl("https://jsonplaceholder.typicode.com/")
   }
 }
 
