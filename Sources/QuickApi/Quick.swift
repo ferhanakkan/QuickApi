@@ -10,14 +10,15 @@
 import Foundation
 import Alamofire
 
-public typealias GenericCompletion<T: Decodable> = (Result<T,QuickError<T>>) -> ()
+public typealias GenericResponseCompletion<T: Decodable> = (Result<T,QuickError<T>>) -> ()
 
 public final class Quick {
   
   public static var shared = Quick()
   
-  private let networkLayer = NetworkLayer()
-  private let multipartNetworkLayer = MultipartNetworkLayer()
+  private let layerHelper = LayerHelper()
+  private lazy var networkLayer = NetworkLayer(layerHelper: layerHelper)
+  private lazy var multipartNetworkLayer = MultipartNetworkLayer(layerHelper: layerHelper)
 }
 
 // MARK: - Logic
@@ -25,16 +26,20 @@ public final class Quick {
 extension Quick {
   
   public func cancelAllRequests() {
-    networkLayer.cancelAllRequests()
-    multipartNetworkLayer.cancelAllRequests()
+    layerHelper.cancelAllRequests()
   }
   
   public func showResponseInDebug(_ isEnable: Bool) {
-    networkLayer.showResponseInDebug(isEnable)
+    layerHelper.showResponseInDebug(isEnable)
+  }
+  
+  public func setTimeOut(_ time: Int) {
+    networkLayer.sessionManager = layerHelper.setTimeOut(time)
+    multipartNetworkLayer.sessionManager = layerHelper.setTimeOut(time)
   }
   
   public func setMaxNumberOfRetry(_ count: Int) {
-    networkLayer.setMaxNumberOfRetry(count)
+    layerHelper.setMaxNumberOfRetry(count)
   }
   
   public func setApiBaseUrlWith(apiType: ApiTypes, apiUrl: String) {
@@ -83,23 +88,23 @@ extension Quick {
 
 extension Quick {
   
-  public func get<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericCompletion<T>) {
+  public func get<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: url, method: .get, parameters: parameters, decodeObject: decodeObject, apiType: apiType, completion: completion)
   }
   
-  public func post<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type,  apiType: ApiTypes = .Primary, completion: @escaping GenericCompletion<T>) {
+  public func post<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type,  apiType: ApiTypes = .Primary, completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: url, method: .post, parameters: parameters, decodeObject: decodeObject, apiType: apiType, completion: completion)
   }
   
-  public func put<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericCompletion<T>) {
+  public func put<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: url, method: .put, parameters: parameters, decodeObject: decodeObject, apiType: apiType, completion: completion)
   }
   
-  public func patch<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericCompletion<T>) {
+  public func patch<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: url, method: .patch, parameters: parameters, decodeObject: decodeObject, apiType: apiType, completion: completion)
   }
   
-  public func delete<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericCompletion<T>) {
+  public func delete<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: url, method: .delete, parameters: parameters, decodeObject: decodeObject, apiType: apiType, completion: completion)
   }
 }
@@ -113,7 +118,7 @@ extension Quick {
                                           method: HTTPMethod,
                                           parameters: Parameters?,
                                           decodeObject: T.Type,
-                                          completion: @escaping GenericCompletion<T>) {
+                                          completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: full,
                          method: method,
                          header: header,
@@ -135,7 +140,7 @@ extension Quick {
                                    datas: [MultipartDataModel],
                                    decodeObject: T.Type,
                                    apiType: ApiTypes,
-                                   completion: @escaping GenericCompletion<T>) {
+                                   completion: @escaping GenericResponseCompletion<T>) {
     multipartNetworkLayer.upload(url: url,
                                  header: nil,
                                  method: method,
@@ -152,7 +157,7 @@ extension Quick {
                                                          parameters: [String: Any],
                                                          datas: [MultipartDataModel],
                                                          decodeObject: T.Type,
-                                                         completion: @escaping GenericCompletion<T>) {
+                                                         completion: @escaping GenericResponseCompletion<T>) {
     multipartNetworkLayer.upload(url: fullUrl,
                                  header: header,
                                  method: method,

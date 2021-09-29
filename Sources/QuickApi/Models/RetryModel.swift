@@ -14,5 +14,5 @@ struct RetryModel<T: Decodable> {
   let parameters: Parameters?
   let decodeObject: T.Type
   let apiType: ApiTypes
-  let completion: GenericCompletion<T>
+  let completion: GenericResponseCompletion<T>
 }

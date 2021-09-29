@@ -18,10 +18,9 @@ final class NetworkLayer {
   
   var customErrorManager: CustomErrorManager = CustomErrorManager()
   
-  private let configuration = URLSessionConfiguration.default
-  private var sessionManager: Session?
+  var sessionManager: Session?
   
-  private var showResponseInConsole: Bool = false
+  private let layerHelper: LayerHelper
   
   var headerCompletion: HttpHeaderCompletion?
   var unauthorizedCompletion: UnauthorizedCompletion?
@@ -29,25 +28,14 @@ final class NetworkLayer {
   
   var authTriggered: Bool = false
   
-  private var requestTimeOut = 0 {
-    didSet {
-      if requestTimeOut < 1 { requestTimeOut = 1 }
-      configuration.timeoutIntervalForRequest = Double(requestTimeOut)
-      configuration.timeoutIntervalForResource = Double(requestTimeOut)
-      sessionManager = Alamofire.Session(configuration: configuration)
-    }
-  }
-  
   private var primaryApi: String?
   private var secondaryApi: String?
   private var tertiaryApi: String?
   
-  private var maxRetryCount: Int = 3
   
-  init() {
-    configuration.timeoutIntervalForRequest = Double(1)
-    configuration.timeoutIntervalForResource = Double(1)
-    sessionManager = Alamofire.Session(configuration: configuration)
+  init(layerHelper: LayerHelper) {
+    self.layerHelper = layerHelper
+    sessionManager = layerHelper.setTimeOut(10)
   }
 }
 
@@ -62,9 +50,9 @@ extension NetworkLayer {
                              decodeObject: T.Type,
                              retryCount: Int = 1,
                              apiType: ApiTypes = .Primary,
-                             completion: @escaping GenericCompletion<T>) {
+                             completion: @escaping GenericResponseCompletion<T>) {
     
-    let encodingType = getEncodingType(method: method)
+    let encodingType = layerHelper.getEncodingType(method: method)
     
     guard let sessionManager = sessionManager else {
       print("Session Manager Issue detected.")
@@ -79,7 +67,7 @@ extension NetworkLayer {
       .validate(statusCode: 200..<300)
       .responseDecodable(of: T.self) { [weak self] response in
         
-        self?.showJsonResponse(response.data)
+        self?.layerHelper.showJsonResponse(response.data)
         
         switch response.result {
         case .success( _):
@@ -93,7 +81,7 @@ extension NetworkLayer {
           
         case .failure(let error):
           guard let self = self else { return }
-          if self.maxRetryCount == retryCount {
+          if self.layerHelper.maxRetryCount == retryCount {
             print("***************** Internet connection error. Failed with many retry attempts. ***********************")
             
             guard let data = response.data,
@@ -101,8 +89,8 @@ extension NetworkLayer {
               print("QuickApi has decoding failure.")
               let quickError = QuickError<T>(alamofireError: error,
                                              response: nil,
-                                             customErrorMessage: self.customErrorManager.getCustomError(json: self.getJsonFromData(response.data), apiType: apiType) as Any,
-                                             json: self.getJsonFromData(response.data),
+                                             customErrorMessage: self.customErrorManager.getCustomError(json: self.layerHelper.getJsonFromData(response.data), apiType: apiType) as Any,
+                                             json: self.layerHelper.getJsonFromData(response.data),
                                              data: response.data,
                                              statusCode: response.response?.statusCode ?? 0)
               completion(.failure(quickError))
@@ -111,8 +99,8 @@ extension NetworkLayer {
             
             let quickError = QuickError<T>(alamofireError: error,
                                            response: responseModel,
-                                           customErrorMessage: self.customErrorManager.getCustomError(json: self.getJsonFromData(response.data), apiType: apiType) as Any,
-                                           json: self.getJsonFromData(data),
+                                           customErrorMessage: self.customErrorManager.getCustomError(json: self.layerHelper.getJsonFromData(response.data), apiType: apiType) as Any,
+                                           json: self.layerHelper.getJsonFromData(data),
                                            data: data,
                                            statusCode: response.response?.statusCode ?? 0)
             
@@ -156,10 +144,6 @@ extension NetworkLayer {
 
 extension NetworkLayer {
   
-  func setMaxNumberOfRetry(_ count: Int) {
-    maxRetryCount = count
-  }
-  
   func setApiBaseUrlWith(apiType: ApiTypes, apiUrl: String) {
     switch apiType {
     case .Primary:
@@ -170,14 +154,6 @@ extension NetworkLayer {
       secondaryApi = apiUrl
     case .Custom:
       break
-    }
-  }
-  
-  func cancelAllRequests() {
-    AF.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
-      sessionDataTask.forEach { $0.cancel() }
-      uploadData.forEach { $0.cancel() }
-      downloadData.forEach { $0.cancel() }
     }
   }
   
@@ -192,33 +168,6 @@ extension NetworkLayer {
     case .Custom:
       return url
     }
-  }
-  
-  private func getEncodingType(method: HTTPMethod) -> ParameterEncoding {
-    return method == .get ? URLEncoding.queryString : JSONEncoding.default
-  }
-  
-  public func showResponseInDebug(_ isEnable: Bool) {
-    showResponseInConsole = isEnable
-  }
-  
-  private func showJsonResponse(_ data: Data?) {
-    if !(showResponseInConsole ) { return }
-    guard let data = data else { return }
-    
-    if let jsonDictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any] {
-      print("************************* Quick Api Response ***************************** \n \(jsonDictionary)")
-    } else if let jsonDictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [[String : Any]] {
-      print("************************* Quick Api Response ***************************** \n \(jsonDictionary)")
-    }
-  }
-  
-  private func getJsonFromData(_ data: Data?) -> [String : Any]? {
-    guard let data = data else { return nil }
-    if let jsonDictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any] {
-      return jsonDictionary
-    }
-    return nil
   }
 }
 
