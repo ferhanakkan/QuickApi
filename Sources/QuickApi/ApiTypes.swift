@@ -8,8 +8,8 @@
 import Foundation
 
 public enum ApiTypes {
-  case Primary
-  case Secondary
-  case Tertiary
-  case Custom
+  case primary
+  case secondary
+  case tertiary
+  case custom
 }

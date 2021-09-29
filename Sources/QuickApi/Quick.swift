@@ -88,23 +88,23 @@ extension Quick {
 
 extension Quick {
   
-  public func get<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericResponseCompletion<T>) {
+  public func get<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .primary, completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: url, method: .get, parameters: parameters, decodeObject: decodeObject, apiType: apiType, completion: completion)
   }
   
-  public func post<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type,  apiType: ApiTypes = .Primary, completion: @escaping GenericResponseCompletion<T>) {
+  public func post<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type,  apiType: ApiTypes = .primary, completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: url, method: .post, parameters: parameters, decodeObject: decodeObject, apiType: apiType, completion: completion)
   }
   
-  public func put<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericResponseCompletion<T>) {
+  public func put<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .primary, completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: url, method: .put, parameters: parameters, decodeObject: decodeObject, apiType: apiType, completion: completion)
   }
   
-  public func patch<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericResponseCompletion<T>) {
+  public func patch<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .primary, completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: url, method: .patch, parameters: parameters, decodeObject: decodeObject, apiType: apiType, completion: completion)
   }
   
-  public func delete<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .Primary, completion: @escaping GenericResponseCompletion<T>) {
+  public func delete<T: Decodable>(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .primary, completion: @escaping GenericResponseCompletion<T>) {
     networkLayer.request(url: url, method: .delete, parameters: parameters, decodeObject: decodeObject, apiType: apiType, completion: completion)
   }
 }
@@ -125,7 +125,7 @@ extension Quick {
                          parameters: parameters,
                          decodeObject: decodeObject,
                          retryCount: 1,
-                         apiType: .Custom,
+                         apiType: .custom,
                          completion: completion)
   }
 }
@@ -164,7 +164,7 @@ extension Quick {
                                  parameters: parameters,
                                  datas: datas,
                                  decodeObject: decodeObject,
-                                 apiType: .Custom,
+                                 apiType: .custom,
                                  completion: completion)
   }
 }

@@ -49,7 +49,7 @@ extension NetworkLayer {
                              parameters: Parameters?,
                              decodeObject: T.Type,
                              retryCount: Int = 1,
-                             apiType: ApiTypes = .Primary,
+                             apiType: ApiTypes = .primary,
                              completion: @escaping GenericResponseCompletion<T>) {
     
     let encodingType = layerHelper.getEncodingType(method: method)
@@ -146,26 +146,26 @@ extension NetworkLayer {
   
   func setApiBaseUrlWith(apiType: ApiTypes, apiUrl: String) {
     switch apiType {
-    case .Primary:
+    case .primary:
       primaryApi = apiUrl
-    case .Secondary:
+    case .secondary:
       secondaryApi = apiUrl
-    case .Tertiary:
+    case .tertiary:
       secondaryApi = apiUrl
-    case .Custom:
+    case .custom:
       break
     }
   }
   
   private func getFullUrl(url: String, apiType: ApiTypes) -> String {
     switch apiType {
-    case .Primary:
+    case .primary:
       return primaryApi ?? "" + url
-    case .Secondary:
+    case .secondary:
       return secondaryApi ?? "" + url
-    case .Tertiary:
+    case .tertiary:
       return tertiaryApi ?? "" + url
-    case .Custom:
+    case .custom:
       return url
     }
   }
