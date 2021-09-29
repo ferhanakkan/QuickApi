@@ -11,14 +11,24 @@
 import Alamofire
 import Foundation
 
+public typealias HttpHeaderCompletion = ((ApiTypes)->(HTTPHeaders))
+
 final class NetworkLayer {
+  
+  var customErrorManager: CustomErrorManager = CustomErrorManager()
   
   private let configuration = URLSessionConfiguration.default
   private var sessionManager: Session?
   
-  private var maxRetryCount: Int?
+  private var customHttpHeader: HTTPHeaders?
+  private var showResponseInConsole: Bool = false
   
-  /// This parameter sets requests time out.
+  var headerCompletion: HttpHeaderCompletion?
+  var authCompletion: (() -> ())?
+  var retryCompletion: (() -> ())?
+  
+  var authTriggered: Bool = false
+  
   private var requestTimeOut = 0 {
     didSet {
       if requestTimeOut < 1 { requestTimeOut = 1 }
@@ -28,94 +38,113 @@ final class NetworkLayer {
     }
   }
   
-  private var baseApiUrl: String?
-  private var endPoint: String?
+  private var primaryApi: String?
+  private var secondaryApi: String?
+  private var tertiaryApi: String?
   
-  private var customHttpHeader: HTTPHeaders?
-  private var languageCode: String?
-  private var showResponseInConsole: Bool = false
-  
-  private var customErrorModel: Bool = false
+  private var maxRetryCount: Int = 3
   
   init() {
-    getCustomHttpHeader()
+    configuration.timeoutIntervalForRequest = Double(1)
+    configuration.timeoutIntervalForResource = Double(1)
+    sessionManager = Alamofire.Session(configuration: configuration)
   }
 }
-
 
 // MARK: - Network For Requests
 
 extension NetworkLayer {
   
-  public func request<T: Decodable>(fullUrl: String,
-                                    method: HTTPMethod,
-                                    parameters: Parameters?,
-                                    decodeObject: T.Type,
-                                    retryCount: Int?,
-                                    completion: @escaping GenericCompletion<T>) {
+  func request<T: Decodable>(url: String,
+                             method: HTTPMethod,
+                             header: HTTPHeaders? = nil,
+                             parameters: Parameters?,
+                             decodeObject: T.Type,
+                             retryCount: Int = 1,
+                             apiType: ApiTypes = .Primary,
+                             completion: @escaping GenericCompletion<T>) {
     
     let encodingType = getEncodingType(method: method)
-    let httpHeader = getHeader()
     
     guard let sessionManager = sessionManager else {
       print("Session Manager Issue detected.")
       return
     }
     
+    let fullUrl = getFullUrl(url: url, apiType: apiType)
+    let httpHeader = header == nil ? (headerCompletion?(apiType) ?? [:]) : header
+    
     sessionManager
       .request(fullUrl, method: method, parameters: parameters, encoding: encodingType, headers: httpHeader)
       .validate(statusCode: 200..<300)
-      .responseJSON { [weak self] response in
+      .responseDecodable(of: T.self) { [weak self] response in
         
         self?.showJsonResponse(response.data)
-        
-        let maxRetryCount = retryCount == nil ? (self?.maxRetryCount ?? 1) : retryCount
-        var retryCounter = 1
         
         switch response.result {
         case .success( _):
           
-          guard let data = response.data else {
+          guard let value = response.value else {
             print("QuickApi has decoding failure.")
-            if let error = response.error { completion(.failure(error)) }
             return
           }
-          
-          guard let responseModel = try? JSONDecoder().decode(T.self, from: data) else {
-            print("QuickApi has decoding failure.")
-            if let error = response.error { completion(.failure(error)) }
-            return
-          }
-          
-          if let statusCode = response.response?.statusCode {
-            switch statusCode {
-            case 200...299:
-              completion(.success(responseModel))
-              
-            case 401:
-              break
-              
-            case 300...599:
-              completion(.failure(response.error!))
-            default:
-              break
-            }
-          }
+          self?.authTriggered = false
+          completion(.success(value))
           
         case .failure(let error):
-          if maxRetryCount == retryCounter {
+          guard let self = self else { return }
+          if self.maxRetryCount == retryCount {
             print("***************** Internet connection error. Failed with many retry attempts. ***********************")
-            completion(.failure(error))
+            
+            guard let data = response.data,
+                  let responseModel = try? JSONDecoder().decode(T.self, from: data) else {
+              print("QuickApi has decoding failure.")
+              let quickError = QuickError<T>(alamofireError: error,
+                                             response: nil,
+                                             customErrorMessage: self.customErrorManager.getCustomError(json: self.getJsonFromData(response.data), apiType: apiType) as Any,
+                                             json: self.getJsonFromData(response.data),
+                                             data: response.data,
+                                             statusCode: response.response?.statusCode ?? 0)
+              completion(.failure(quickError))
+              return
+            }
+            
+            let quickError = QuickError<T>(alamofireError: error,
+                                           response: responseModel,
+                                           customErrorMessage: self.customErrorManager.getCustomError(json: self.getJsonFromData(response.data), apiType: apiType) as Any,
+                                           json: self.getJsonFromData(data),
+                                           data: data,
+                                           statusCode: response.response?.statusCode ?? 0)
+            
+            if let statusCode = response.response?.statusCode,
+               statusCode == 401 && !self.authTriggered {
+              self.authTriggered = true
+              
+              self.retryCompletion = {
+                self.authTriggered = false
+                self.request(url: fullUrl,
+                             method: method,
+                             header: httpHeader,
+                             parameters: parameters,
+                             decodeObject: decodeObject,
+                             retryCount: retryCount + 1,
+                             completion: completion)
+              }
+              
+            } else {
+              completion(.failure(quickError))
+            }
+            
           } else {
-            print("***************** Internet connection error. Going to retry with #: \((retryCount ?? 0 )+1) *****************")
             DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
-              retryCounter += 1
-              self?.request(fullUrl: fullUrl,
-                            method: method,
-                            parameters: parameters,
-                            decodeObject: decodeObject,
-                            retryCount: retryCount,
-                            completion: completion)
+              print("***************** Going to retry with #: \(retryCount+1) ***********************")
+              self.request(url: fullUrl,
+                           method: method,
+                           header: httpHeader,
+                           parameters: parameters,
+                           decodeObject: decodeObject,
+                           retryCount: retryCount + 1,
+                           completion: completion)
             }
           }
         }
@@ -123,43 +152,25 @@ extension NetworkLayer {
   }
 }
 
-// MARK: - Actions For Requests
-
-extension NetworkLayer {
-  
-  func callRequest<T: Decodable>(url: String,
-                                 parameters: Parameters? = nil,
-                                 decodeObject: T.Type,
-                                 method: HTTPMethod,
-                                 completion: @escaping GenericCompletion<T>,
-                                 retryCount: Int?) {
-    let fullUrl = baseApiUrl ?? "" + url
-    request(fullUrl: fullUrl, method: method, parameters: parameters, decodeObject: decodeObject, retryCount: retryCount, completion: completion)
-  }
-}
-
 // MARK: - Logic
 
 extension NetworkLayer {
   
-  func setBaseUrl(_ url: String) {
-    baseApiUrl = url
+  func setMaxNumberOfRetry(_ count: Int) {
+    maxRetryCount = count
   }
   
-  private func getCustomHttpHeader() {
-    if let header = UserDefaults.standard.value(forKey: Constants.customHttpHeader) as? HTTPHeaders {
-      customHttpHeader = header
+  func setApiBaseUrlWith(apiType: ApiTypes, apiUrl: String) {
+    switch apiType {
+    case .Primary:
+      primaryApi = apiUrl
+    case .Secondary:
+      secondaryApi = apiUrl
+    case .Tertiary:
+      secondaryApi = apiUrl
+    case .Custom:
+      break
     }
-  }
-  
-  func setCustomHttpHeader(_ header: HTTPHeaders) {
-    customHttpHeader = header
-    UserDefaults.standard.setValue(header, forKey: Constants.customHttpHeader)
-  }
-  
-  func clearCustomHttpHeader() {
-    customHttpHeader = nil
-    UserDefaults.standard.setValue(nil, forKey: Constants.customHttpHeader)
   }
   
   func cancelAllRequests() {
@@ -170,26 +181,28 @@ extension NetworkLayer {
     }
   }
   
-  private func getHeader() -> HTTPHeaders {
-    if let customHttpHeader = customHttpHeader {
-      return customHttpHeader
+  private func getFullUrl(url: String, apiType: ApiTypes) -> String {
+    switch apiType {
+    case .Primary:
+      return primaryApi ?? "" + url
+    case .Secondary:
+      return secondaryApi ?? "" + url
+    case .Tertiary:
+      return tertiaryApi ?? "" + url
+    case .Custom:
+      return url
     }
-    
-    let userDefaults = UserDefaults.standard
-    if let token: String = userDefaults.value(forKey: Constants.token) as? String {
-      return  ["Authorization": "Bearer \(token)",
-               "Content-Type" : "application/json",
-               "Accept-Language": languageCode ?? ""]
-    }
-    return  ["Content-Type" : "application/json",
-             "Accept-Language": languageCode ?? ""]
   }
   
   private func getEncodingType(method: HTTPMethod) -> ParameterEncoding {
     return method == .get ? URLEncoding.queryString : JSONEncoding.default
   }
   
-  private func showJsonResponse(_ data:Data?) {
+  public func showResponseInDebug(_ isEnable: Bool) {
+    showResponseInConsole = isEnable
+  }
+  
+  private func showJsonResponse(_ data: Data?) {
     if !(showResponseInConsole ) { return }
     guard let data = data else { return }
     
@@ -200,8 +213,13 @@ extension NetworkLayer {
     }
   }
   
-  private func getCustomError() {
-    //    Burayı en son custom
+  private func getJsonFromData(_ data: Data?) -> [String : Any]? {
+    guard let data = data else { return nil }
+    if let jsonDictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any] {
+      return jsonDictionary
+    }
+    return nil
   }
 }
+
 #endif
