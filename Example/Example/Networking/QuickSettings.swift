@@ -41,7 +41,7 @@ final class QuickSettings: HttpCustomizationProtocols, UnauthorizedCustomization
     case .secondary:
       return [
         "Authorization" : "Bearer \(tmdbToken)",
-        "Content-Type" : "application/json;charset=utf-8"
+//        "Content-Type" : "application/json;charset=utf-8"
       ]
       
     case .tertiary:
@@ -70,10 +70,10 @@ final class QuickSettings: HttpCustomizationProtocols, UnauthorizedCustomization
     }
   }
   
-  func errorCustomization(json: [[String : Any]]?, apiType: ApiTypes) -> Any? {
+  func errorCustomization(json: [String : Any]?, apiType: ApiTypes) -> Any? {
     switch apiType {
     case .primary:
-      return json?[0]["message"]
+      return json?["message"]
       
     case .secondary:
       return nil
