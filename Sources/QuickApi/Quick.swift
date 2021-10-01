@@ -61,30 +61,32 @@ extension Quick {
   public func setStatusCodeHandler(delegate: StatusCodeHandlerProtocol) {
     networkLayer.statusCodeDelegate = delegate
   }
-  
-//  public func setApiBaseUrlForMultipartWith(apiType: ApiTypes, apiUrl: String) {
-//    networkLayer.setApiBaseUrlWith(apiType: apiType, apiUrl: apiUrl)
-//  }
-//
-
-  
-//  public func setCustomErrorManagerForMultipart(completion: @escaping CustomErrorCompletion) {
-//    networkLayer.customErrorManager.setCustomError = completion
-//  }
-  
-//  public func setHeaderCompletionForMultipart(completion: @escaping HttpHeaderCompletion) {
-//    networkLayer.headerCompletion = completion
-//  }
-  
-//  public func setUnauthorizedForMultipart(completion: @escaping UnauthorizedCompletion) {
-//    multipartNetworkLayer.unauthorizedCompletion = completion
-//  }
-//
-//  public func retryAfterUnauthStatusForMultipart() {
-//    multipartNetworkLayer.retryCompletion?()
-//  }
 }
 
+// MARK: - Logic Multipart
+
+extension Quick {
+  
+  public func setApiBaseUrlWithForMultipart(apiType: ApiTypes, apiUrl: String) {
+    multipartNetworkLayer.setApiBaseUrlWith(apiType: apiType, apiUrl: apiUrl)
+  }
+  
+  public func setCustomErrorManagerForMultipart(delegate: ErrorCustomizationProtocol) {
+    multipartNetworkLayer.customErrorDelegate = delegate
+  }
+  
+  public func setHeaderCompletionForMultipart(delegate: HttpCustomizationProtocols) {
+    multipartNetworkLayer.headerDelegate = delegate
+  }
+  
+  public func setUnauthorizedForMultipart(delegate: UnauthorizedCustomizationProtocol) {
+    multipartNetworkLayer.unauthorizedDelegate = delegate
+  }
+  
+  public func setStatusCodeHandlerForMultipart(delegate: StatusCodeHandlerProtocol) {
+    multipartNetworkLayer.statusCodeDelegate = delegate
+  }
+}
 
 // MARK: - Network Requests
 

@@ -14,17 +14,21 @@ final class MultipartNetworkLayer {
   
   var sessionManager: Session?
   
-  let layerHelper: LayerHelper
+  private let layerHelper: LayerHelper
   
   weak var headerDelegate: HttpCustomizationProtocols?
   weak var unauthorizedDelegate: UnauthorizedCustomizationProtocol?
   weak var customErrorDelegate: ErrorCustomizationProtocol?
+  weak var statusCodeDelegate: StatusCodeHandlerProtocol?
   
-  var authTriggered: Bool = false
+  private var unauthorizedServiceActive: Bool {
+    return !(unauthorizedDelegate == nil)
+  }
   
   private var primaryApi: String?
   private var secondaryApi: String?
   private var tertiaryApi: String?
+  
   
   init(layerHelper: LayerHelper) {
     self.layerHelper = layerHelper
@@ -44,11 +48,11 @@ extension MultipartNetworkLayer {
                             decodeObject: T.Type,
                             retryCount: Int = 1,
                             apiType: ApiTypes = .primary,
+                            isUnauthRequest: Bool = false,
                             completion: @escaping GenericResponseCompletion<T>) {
     
     guard let sessionManager = sessionManager else {
-      print("Session Manager Issue detected.")
-      return
+      fatalError(Constants.sessionIssue)
     }
     
     let fullUrl = getFullUrl(url: url, apiType: apiType)
@@ -60,41 +64,40 @@ extension MultipartNetworkLayer {
       }
       
       for selectedData in datas {
-        multipart.append(selectedData.data, withName: selectedData.withName,
+        multipart.append(selectedData.data,
+                         withName: selectedData.withName,
                          fileName: selectedData.fileName,
                          mimeType: selectedData.mimeType)
       }
       
-    },to: url , usingThreshold: UInt64.init(),
+    },to: fullUrl ,
+    usingThreshold: UInt64.init(),
     method: method,
     headers: httpHeader)
     .validate(statusCode: 200..<300)
     .responseDecodable(of: T.self) { [weak self] response in
-      print("Request send to = \(response.request?.url?.absoluteString ?? "")")
+      print(Constants.requestUrl.replacingOccurrences(of: "$", with: response.request?.url?.absoluteString ?? "-"))
       self?.layerHelper.showJsonResponse(response.data)
       
       switch response.result {
       case .success( _):
-        
         guard let value = response.value else {
-          print("QuickApi has decoding failure.")
           return
         }
-        self?.authTriggered = false
         completion(.success(value))
         
       case .failure(let error):
         guard let self = self else { return }
-        if self.layerHelper.maxRetryCount == retryCount {
-          print("***************** Internet connection error. Failed with many retry attempts. ***********************")
-          
+        if self.layerHelper.maxRetryCount <= retryCount {
+          print(Constants.manyAttempts)
+          self.statusCodeDelegate?.handleStatusCodeFor(apiType: apiType, statusCode: response.response?.statusCode ?? 0)
           guard let data = response.data,
                 let responseModel = try? JSONDecoder().decode(T.self, from: data) else {
-            print("QuickApi has decoding failure.")
+            print(Constants.failureDecoding)
             let quickError = QuickError<T>(alamofireError: error,
                                            response: nil,
                                            customErrorMessage: self.customErrorDelegate?.errorCustomization(json: self.layerHelper.getJsonFromData(response.data),
-                                               apiType: apiType),
+                                                                                                            apiType: apiType),
                                            json: self.layerHelper.getJsonFromData(response.data),
                                            data: response.data,
                                            statusCode: response.response?.statusCode ?? 0)
@@ -105,33 +108,33 @@ extension MultipartNetworkLayer {
           let quickError = QuickError<T>(alamofireError: error,
                                          response: responseModel,
                                          customErrorMessage: self.customErrorDelegate?.errorCustomization(json: self.layerHelper.getJsonFromData(response.data),
-                                             apiType: apiType),
+                                                                                                          apiType: apiType),
                                          json: self.layerHelper.getJsonFromData(data),
                                          data: data,
                                          statusCode: response.response?.statusCode ?? 0)
           
-          if let statusCode = response.response?.statusCode,
-             statusCode == 401 && !self.authTriggered {
-            self.authTriggered = true
+          switch response.response?.statusCode ?? 0 {
+          case 401 where isUnauthRequest && self.unauthorizedServiceActive:
+            self.unauthorizedDelegate?.unauthorizedCustomization(apiType: apiType, completion: { [weak self] retryLastResponse in
+              DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
+                self?.upload(url: url,
+                             header: self?.headerDelegate?.httpHeaderCustomization(apiType: apiType) ?? [:],
+                             method: method,
+                             parameters: parameters,
+                             datas: datas,
+                             decodeObject: decodeObject, retryCount: retryCount + 1,
+                             apiType: apiType,
+                             completion: completion)
+              }
+            })
             
-//            self.retryCompletion = {
-//              self.authTriggered = false
-//              self.upload(url: url,
-//                          header: httpHeader,
-//                          method: method,
-//                          parameters: parameters,
-//                          datas: datas,
-//                          decodeObject: decodeObject,
-//                          retryCount: retryCount + 1,
-//                          completion: completion)
-//            }
-          } else {
+          default:
             completion(.failure(quickError))
           }
           
         } else {
           DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
-            print("***************** Going to retry with #: \(retryCount+1) ***********************")
+            print(Constants.retryRequest.replacingOccurrences(of: "$", with: String(retryCount + 1)))
             self.upload(url: url,
                         header: httpHeader,
                         method: method,
@@ -139,6 +142,8 @@ extension MultipartNetworkLayer {
                         datas: datas,
                         decodeObject: decodeObject,
                         retryCount: retryCount + 1,
+                        apiType: apiType,
+                        isUnauthRequest: retryCount + 1 == self.layerHelper.maxRetryCount,
                         completion: completion)
           }
         }
@@ -174,6 +179,8 @@ extension MultipartNetworkLayer {
       return "\(String(describing: tertiaryApi ?? ""))\(url)"
     case .custom:
       return url
-    }  }
+    }
+  }
 }
+
 #endif
