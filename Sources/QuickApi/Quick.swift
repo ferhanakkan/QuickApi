@@ -46,41 +46,43 @@ extension Quick {
     networkLayer.setApiBaseUrlWith(apiType: apiType, apiUrl: apiUrl)
   }
   
-  public func setApiBaseUrlForMultipartWith(apiType: ApiTypes, apiUrl: String) {
-    networkLayer.setApiBaseUrlWith(apiType: apiType, apiUrl: apiUrl)
+  public func setCustomErrorManager(delegate: ErrorCustomizationProtocol) {
+    networkLayer.customErrorDelegate = delegate
   }
   
-  public func setCustomErrorManager(completion: @escaping CustomErrorCompletion) {
-    networkLayer.customErrorManager.setCustomError = completion
+  public func setHeaderCompletion(delegate: HttpCustomizationProtocols) {
+    networkLayer.headerDelegate = delegate
   }
   
-  public func setCustomErrorManagerForMultipart(completion: @escaping CustomErrorCompletion) {
-    networkLayer.customErrorManager.setCustomError = completion
+  public func setUnauthorized(delegate: UnauthorizedCustomizationProtocol) {
+    networkLayer.unauthorizedDelegate = delegate
   }
   
-  public func setHeaderCompletion(completion: @escaping HttpHeaderCompletion) {
-    networkLayer.headerCompletion = completion
+  public func setUnauthorizedServiceActive(_ isActive: Bool) {
+    networkLayer.unauthorizedServiceActive = isActive
   }
   
-  public func setHeaderCompletionForMultipart(completion: @escaping HttpHeaderCompletion) {
-    networkLayer.headerCompletion = completion
-  }
+//  public func setApiBaseUrlForMultipartWith(apiType: ApiTypes, apiUrl: String) {
+//    networkLayer.setApiBaseUrlWith(apiType: apiType, apiUrl: apiUrl)
+//  }
+//
+
   
-  public func setUnauthorized(completion: @escaping UnauthorizedCompletion) {
-    networkLayer.unauthorizedCompletion = completion
-  }
+//  public func setCustomErrorManagerForMultipart(completion: @escaping CustomErrorCompletion) {
+//    networkLayer.customErrorManager.setCustomError = completion
+//  }
   
-  public func retryAfterUnauthStatus() {
-    networkLayer.retryCompletion?()
-  }
+//  public func setHeaderCompletionForMultipart(completion: @escaping HttpHeaderCompletion) {
+//    networkLayer.headerCompletion = completion
+//  }
   
-  public func setUnauthorizedForMultipart(completion: @escaping UnauthorizedCompletion) {
-    multipartNetworkLayer.unauthorizedCompletion = completion
-  }
-  
-  public func retryAfterUnauthStatusForMultipart() {
-    multipartNetworkLayer.retryCompletion?()
-  }
+//  public func setUnauthorizedForMultipart(completion: @escaping UnauthorizedCompletion) {
+//    multipartNetworkLayer.unauthorizedCompletion = completion
+//  }
+//
+//  public func retryAfterUnauthStatusForMultipart() {
+//    multipartNetworkLayer.retryCompletion?()
+//  }
 }
 
 

@@ -11,22 +11,17 @@
 import Alamofire
 import Foundation
 
-public typealias HttpHeaderCompletion = ((ApiTypes)->(HTTPHeaders))
-public typealias UnauthorizedCompletion = ((ApiTypes)->())
-
 final class NetworkLayer {
-  
-  var customErrorManager: CustomErrorManager = CustomErrorManager()
   
   var sessionManager: Session?
   
   private let layerHelper: LayerHelper
   
-  var headerCompletion: HttpHeaderCompletion?
-  var unauthorizedCompletion: UnauthorizedCompletion?
-  var retryCompletion: (() -> ())?
+  weak var headerDelegate: HttpCustomizationProtocols?
+  weak var unauthorizedDelegate: UnauthorizedCustomizationProtocol?
+  weak var customErrorDelegate: ErrorCustomizationProtocol?
   
-  var authTriggered: Bool = false
+  var unauthorizedServiceActive: Bool = false
   
   private var primaryApi: String?
   private var secondaryApi: String?
@@ -50,8 +45,8 @@ extension NetworkLayer {
                              decodeObject: T.Type,
                              retryCount: Int = 1,
                              apiType: ApiTypes = .primary,
+                             isUnauthRequest: Bool = false,
                              completion: @escaping GenericResponseCompletion<T>) {
-    
     let encodingType = layerHelper.getEncodingType(method: method)
     
     guard let sessionManager = sessionManager else {
@@ -60,28 +55,25 @@ extension NetworkLayer {
     }
     
     let fullUrl = getFullUrl(url: url, apiType: apiType)
-    let httpHeader = header == nil ? (headerCompletion?(apiType) ?? [:]) : header
+    let httpHeader = header == nil ? (headerDelegate?.httpHeaderCustomization(apiType: apiType) ?? [:]) : header
     
     sessionManager
       .request(fullUrl, method: method, parameters: parameters, encoding: encodingType, headers: httpHeader)
       .validate(statusCode: 200..<300)
       .responseDecodable(of: T.self) { [weak self] response in
-        
+        print("Request send to = \(response.request?.url?.absoluteString ?? "")")
         self?.layerHelper.showJsonResponse(response.data)
         
         switch response.result {
         case .success( _):
-          
           guard let value = response.value else {
-            print("QuickApi has decoding failure.")
             return
           }
-          self?.authTriggered = false
           completion(.success(value))
           
         case .failure(let error):
           guard let self = self else { return }
-          if self.layerHelper.maxRetryCount == retryCount {
+          if self.layerHelper.maxRetryCount <= retryCount {
             print("***************** Internet connection error. Failed with many retry attempts. ***********************")
             
             guard let data = response.data,
@@ -89,7 +81,8 @@ extension NetworkLayer {
               print("QuickApi has decoding failure.")
               let quickError = QuickError<T>(alamofireError: error,
                                              response: nil,
-                                             customErrorMessage: self.customErrorManager.getCustomError(json: self.layerHelper.getJsonFromData(response.data), apiType: apiType) as Any,
+                                             customErrorMessage: self.customErrorDelegate?.errorCustomization(json: self.layerHelper.getJsonFromData(response.data),
+                                                                                                              apiType: apiType),
                                              json: self.layerHelper.getJsonFromData(response.data),
                                              data: response.data,
                                              statusCode: response.response?.statusCode ?? 0)
@@ -99,39 +92,40 @@ extension NetworkLayer {
             
             let quickError = QuickError<T>(alamofireError: error,
                                            response: responseModel,
-                                           customErrorMessage: self.customErrorManager.getCustomError(json: self.layerHelper.getJsonFromData(response.data), apiType: apiType) as Any,
+                                           customErrorMessage: self.customErrorDelegate?.errorCustomization(json: self.layerHelper.getJsonFromData(response.data),
+                                                                                                            apiType: apiType),
                                            json: self.layerHelper.getJsonFromData(data),
                                            data: data,
                                            statusCode: response.response?.statusCode ?? 0)
             
-            if let statusCode = response.response?.statusCode,
-               statusCode == 401 && !self.authTriggered {
-              self.authTriggered = true
+            switch response.response?.statusCode ?? 0 {
+            case 401 where isUnauthRequest && self.unauthorizedServiceActive:
+              self.unauthorizedDelegate?.unauthorizedCustomization(apiType: apiType, completion: { [weak self] retryLastResponse in
+                DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
+                  self?.request(url: url,
+                               method: method,
+                               header: httpHeader,
+                               parameters: parameters,
+                               decodeObject: decodeObject,
+                               retryCount: retryCount + 1,
+                               completion: completion)
+                }
+              })
               
-              self.retryCompletion = {
-                self.authTriggered = false
-                self.request(url: fullUrl,
-                             method: method,
-                             header: httpHeader,
-                             parameters: parameters,
-                             decodeObject: decodeObject,
-                             retryCount: retryCount + 1,
-                             completion: completion)
-              }
-              
-            } else {
+            default:
               completion(.failure(quickError))
             }
             
           } else {
             DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
               print("***************** Going to retry with #: \(retryCount+1) ***********************")
-              self.request(url: fullUrl,
+              self.request(url: url,
                            method: method,
                            header: httpHeader,
                            parameters: parameters,
                            decodeObject: decodeObject,
                            retryCount: retryCount + 1,
+                           isUnauthRequest: retryCount + 1 == self.layerHelper.maxRetryCount,
                            completion: completion)
             }
           }
@@ -160,11 +154,11 @@ extension NetworkLayer {
   private func getFullUrl(url: String, apiType: ApiTypes) -> String {
     switch apiType {
     case .primary:
-      return primaryApi ?? "" + url
+      return "\(String(describing: primaryApi ?? ""))\(url)"
     case .secondary:
-      return secondaryApi ?? "" + url
+      return "\(String(describing: secondaryApi ?? ""))\(url)"
     case .tertiary:
-      return tertiaryApi ?? "" + url
+      return "\(String(describing: tertiaryApi ?? ""))\(url)"
     case .custom:
       return url
     }

@@ -12,16 +12,21 @@ import QuickApi
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
+  
+  var test: QuickSettings?
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    
+    setQuickApi()
+    
     window = UIWindow(frame: UIScreen.main.bounds)
-    window?.rootViewController = ViewController()
+    window?.rootViewController = UINavigationController(rootViewController: HomeController())
     window?.makeKeyAndVisible()
     return true
   }
   
   private func setQuickApi() {
-    Quick.shared.setBaseUrl("https://jsonplaceholder.typicode.com/")
+    test = QuickSettings()
   }
 }
 

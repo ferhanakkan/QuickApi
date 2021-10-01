@@ -12,18 +12,15 @@ import Foundation
 
 final class MultipartNetworkLayer {
   
-  var customErrorManager: CustomErrorManager = CustomErrorManager()
-  
   var sessionManager: Session?
   
   let layerHelper: LayerHelper
   
-  var unauthorizedCompletion: UnauthorizedCompletion?
-  var retryCompletion: (() -> ())?
+  weak var headerDelegate: HttpCustomizationProtocols?
+  weak var unauthorizedDelegate: UnauthorizedCustomizationProtocol?
+  weak var customErrorDelegate: ErrorCustomizationProtocol?
   
   var authTriggered: Bool = false
-  
-  var headerCompletion: HttpHeaderCompletion?
   
   private var primaryApi: String?
   private var secondaryApi: String?
@@ -55,7 +52,7 @@ extension MultipartNetworkLayer {
     }
     
     let fullUrl = getFullUrl(url: url, apiType: apiType)
-    let httpHeader = header == nil ? (headerCompletion?(apiType) ?? [:]) : header
+    let httpHeader = header == nil ? (headerDelegate?.httpHeaderCustomization(apiType: apiType) ?? [:]) : header
     
     sessionManager.upload(multipartFormData: { (multipart) in
       for (key, value) in parameters {
@@ -73,7 +70,7 @@ extension MultipartNetworkLayer {
     headers: httpHeader)
     .validate(statusCode: 200..<300)
     .responseDecodable(of: T.self) { [weak self] response in
-      
+      print("Request send to = \(response.request?.url?.absoluteString ?? "")")
       self?.layerHelper.showJsonResponse(response.data)
       
       switch response.result {
@@ -96,7 +93,8 @@ extension MultipartNetworkLayer {
             print("QuickApi has decoding failure.")
             let quickError = QuickError<T>(alamofireError: error,
                                            response: nil,
-                                           customErrorMessage: self.customErrorManager.getCustomError(json: self.layerHelper.getJsonFromData(response.data), apiType: apiType) as Any,
+                                           customErrorMessage: self.customErrorDelegate?.errorCustomization(json: self.layerHelper.getJsonFromData(response.data),
+                                               apiType: apiType),
                                            json: self.layerHelper.getJsonFromData(response.data),
                                            data: response.data,
                                            statusCode: response.response?.statusCode ?? 0)
@@ -106,7 +104,8 @@ extension MultipartNetworkLayer {
           
           let quickError = QuickError<T>(alamofireError: error,
                                          response: responseModel,
-                                         customErrorMessage: self.customErrorManager.getCustomError(json: self.layerHelper.getJsonFromData(response.data), apiType: apiType) as Any,
+                                         customErrorMessage: self.customErrorDelegate?.errorCustomization(json: self.layerHelper.getJsonFromData(response.data),
+                                             apiType: apiType),
                                          json: self.layerHelper.getJsonFromData(data),
                                          data: data,
                                          statusCode: response.response?.statusCode ?? 0)
@@ -115,17 +114,17 @@ extension MultipartNetworkLayer {
              statusCode == 401 && !self.authTriggered {
             self.authTriggered = true
             
-            self.retryCompletion = {
-              self.authTriggered = false
-              self.upload(url: fullUrl,
-                          header: httpHeader,
-                          method: method,
-                          parameters: parameters,
-                          datas: datas,
-                          decodeObject: decodeObject,
-                          retryCount: retryCount + 1,
-                          completion: completion)
-            }
+//            self.retryCompletion = {
+//              self.authTriggered = false
+//              self.upload(url: url,
+//                          header: httpHeader,
+//                          method: method,
+//                          parameters: parameters,
+//                          datas: datas,
+//                          decodeObject: decodeObject,
+//                          retryCount: retryCount + 1,
+//                          completion: completion)
+//            }
           } else {
             completion(.failure(quickError))
           }
@@ -133,7 +132,7 @@ extension MultipartNetworkLayer {
         } else {
           DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
             print("***************** Going to retry with #: \(retryCount+1) ***********************")
-            self.upload(url: fullUrl,
+            self.upload(url: url,
                         header: httpHeader,
                         method: method,
                         parameters: parameters,
@@ -168,14 +167,13 @@ extension MultipartNetworkLayer {
   private func getFullUrl(url: String, apiType: ApiTypes) -> String {
     switch apiType {
     case .primary:
-      return primaryApi ?? "" + url
+      return "\(String(describing: primaryApi ?? ""))\(url)"
     case .secondary:
-      return secondaryApi ?? "" + url
+      return "\(String(describing: secondaryApi ?? ""))\(url)"
     case .tertiary:
-      return tertiaryApi ?? "" + url
+      return "\(String(describing: tertiaryApi ?? ""))\(url)"
     case .custom:
       return url
-    }
-  }
+    }  }
 }
 #endif
