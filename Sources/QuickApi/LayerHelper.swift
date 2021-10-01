@@ -46,9 +46,9 @@ final class LayerHelper {
     guard let data = data else { return }
     
     if let jsonDictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any] {
-      print("************************* Quick Api Response ***************************** \n \(jsonDictionary)")
+      print("************************* Quick Api Response ***************************** \n\n \(jsonDictionary) \n\n")
     } else if let jsonDictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [[String : Any]] {
-      print("************************* Quick Api Response ***************************** \n \(jsonDictionary)")
+      print("************************* Quick Api Response ***************************** \n\n \(jsonDictionary) \n\n")
     }
   }
   

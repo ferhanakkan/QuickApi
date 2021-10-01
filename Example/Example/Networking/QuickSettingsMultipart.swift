@@ -1,18 +1,16 @@
 //
-//  QuickSettings.swift
-//  
+//  QuickSettingsMultipart.swift
+//  Example
 //
-//  Created by Ferhan Akkan on 1.10.2021.
+//  Created by Ferhan Akkan on 2.10.2021.
 //
 
 import QuickApi
 import Alamofire
 
-final class QuickSettings {
+final class QuickSettingsMultipart {
   
   static let shared = QuickSettings()
-  
-  var tmdbToken: String = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MGE4ZTIxNzY4NTZhMDUwMjRhZDkzYzQwMWU3MDk5MiIsInN1YiI6IjYwNDU0ZmNjZDhlMjI1MDA0NTUyZjg5OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0eT2aN1gqiaZADmuf158U4fTJfS1jbQtD96g_kEbNhk"
   
   init() {
     setQuickApiSettings()
@@ -23,33 +21,19 @@ final class QuickSettings {
     Quick.shared.setTimeOut(10)
     Quick.shared.showResponseInDebug(true)
     
-    Quick.shared.setUnauthorized(delegate: self)
-    Quick.shared.setHeaderCompletion(delegate: self)
-    Quick.shared.setCustomErrorManager(delegate: self)
-    Quick.shared.setStatusCodeHandler(delegate: self)
-    
-    Quick.shared.setApiBaseUrlWith(apiType: .primary, apiUrl: "http://api.openweathermap.org/")
-    Quick.shared.setApiBaseUrlWith(apiType: .secondary, apiUrl: "https://api.themoviedb.org/4/")
-//    Quick.shared.setApiBaseUrlForMultipartWith(apiType: .primary, apiUrl: "")
-  }
-}
-
-// MARK: - Token Actions
-
-extension QuickSettings {
-  
-  func setWrongTokenForSecondaryApi() {
-    tmdbToken = "WrongToken"
-  }
-  
-  func setTrueTokenForSecondartApi() {
-    tmdbToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MGE4ZTIxNzY4NTZhMDUwMjRhZDkzYzQwMWU3MDk5MiIsInN1YiI6IjYwNDU0ZmNjZDhlMjI1MDA0NTUyZjg5OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0eT2aN1gqiaZADmuf158U4fTJfS1jbQtD96g_kEbNhk"
+//    Quick.shared.setUnauthorized(delegate: self)
+//    Quick.shared.setHeaderCompletion(delegate: self)
+//    Quick.shared.setCustomErrorManager(delegate: self)
+//    Quick.shared.setStatusCodeHandler(delegate: self)
+//
+//    Quick.shared.setApiBaseUrlWith(apiType: .primary, apiUrl: "http://api.openweathermap.org/")
+//    Quick.shared.setApiBaseUrlWith(apiType: .secondary, apiUrl: "https://api.themoviedb.org/4/")
   }
 }
 
 // MARK: - Unauthorized Handling
 
-extension QuickSettings: UnauthorizedCustomizationProtocol {
+extension QuickSettingsMultipart: UnauthorizedCustomizationProtocol {
   
   func unauthorizedCustomization(apiType: ApiTypes, completion: @escaping (Bool) -> ()) {
     switch apiType {
@@ -58,7 +42,7 @@ extension QuickSettings: UnauthorizedCustomizationProtocol {
       break
       
     case .secondary:
-      setTrueTokenForSecondartApi()
+//      setTrueTokenForSecondartApi()
       completion(true)
       
     case .tertiary:
@@ -72,7 +56,7 @@ extension QuickSettings: UnauthorizedCustomizationProtocol {
 
 // MARK: - Status Code Handling
 
-extension QuickSettings: StatusCodeHandlerProtocol {
+extension QuickSettingsMultipart: StatusCodeHandlerProtocol {
   
   func handleStatusCodeFor(apiType: ApiTypes, statusCode: Int) {
     switch apiType {
@@ -93,7 +77,7 @@ extension QuickSettings: StatusCodeHandlerProtocol {
 
 // MARK: - Custom Error Handling
 
-extension QuickSettings: ErrorCustomizationProtocol {
+extension QuickSettingsMultipart: ErrorCustomizationProtocol {
   
   func errorCustomization(json: [String : Any]?, apiType: ApiTypes) -> Any? {
     switch apiType {
@@ -114,7 +98,7 @@ extension QuickSettings: ErrorCustomizationProtocol {
 
 // MARK: - Http Header Handling
 
-extension QuickSettings: HttpCustomizationProtocols {
+extension QuickSettingsMultipart: HttpCustomizationProtocols {
   
   func httpHeaderCustomization(apiType: ApiTypes) -> HTTPHeaders? {
     switch apiType {
@@ -124,7 +108,7 @@ extension QuickSettings: HttpCustomizationProtocols {
       
     case .secondary:
       return [
-        "Authorization" : "Bearer \(tmdbToken)",
+        "Authorization" : "Bearer test",
         "Content-Type" : "application/json;charset=utf-8"
       ]
       

@@ -8,52 +8,35 @@
 import UIKit
 import QuickApi
 
-final class SecondaryController: UIViewController {
-  
-  private let items = ["Post Successful Request",
-                       "Post Unauthorized Request",
-                       "Post Failure Request"]
-  
-  private lazy var tableView: UITableView = {
-    let tableView = UITableView()
-    tableView.tableFooterView = UIView(frame: .zero)
-    tableView.delegate = self
-    tableView.dataSource = self
-    return tableView
-  }()
+final class SecondaryController: RequestController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    setLayout()
-    tableView.reloadData()
+    items = ["Get Successful Request",
+             "Get Unauthorized Request",
+             "Get Failure Request"]
+    title = "Secondary Controller"
   }
 }
 
 // MARK: - TableView Delegate & DataSource
 
-extension SecondaryController: UITableViewDelegate, UITableViewDataSource {
-  
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return items.count
-  }
-  
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-    cell.textLabel?.text = items[indexPath.row]
-    return cell
-  }
+extension SecondaryController {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
     switch indexPath.row {
     case 0:
+      QuickSettings.shared.setTrueTokenForSecondartApi()
       createListItem()
       
     case 1:
+      QuickSettings.shared.setWrongTokenForSecondaryApi()
       createListItemUnauthenticated()
       
     case 2:
+      QuickSettings.shared.setTrueTokenForSecondartApi()
       createListItemFailure()
       
     default:
@@ -69,11 +52,8 @@ extension SecondaryController {
   
   private func createListItem() {
     
-    let params = TmdbRequest(name: "test",
-                             iso_639_1: "en")
-    
-    Quick.shared.post(url: "list",
-                      parameters: params.asDictionary(),
+    Quick.shared.get(url: "list/1",
+                      parameters: nil,
                       decodeObject: TmdbResponse.self,
                       apiType: .secondary) { result in
       switch result {
@@ -89,58 +69,35 @@ extension SecondaryController {
   
   private func createListItemUnauthenticated() {
     
-    let params = TmdbRequest(name: "test",
-                             iso_639_1: "test")
-    
-    Quick.shared.post(url: "list",
-                      parameters: params.asDictionary(),
+    Quick.shared.get(url: "list/1",
+                      parameters: nil,
                       decodeObject: TmdbResponse.self,
                       apiType: .secondary) { result in
       switch result {
       case .success(_):
         break
         
-      case .failure(_):
-        break
+      case .failure(let error):
+        print("fero \(error.statusCode)")
+        print("test \(error.json)")
       }
     }
   }
   
   private func createListItemFailure() {
     
-    let params = TmdbRequest(name: "test",
-                             iso_639_1: "test")
-    
-    Quick.shared.post(url: "wronUrl",
-                      parameters: params.asDictionary(),
+    Quick.shared.get(url: "list",
+                      parameters: nil,
                       decodeObject: TmdbResponse.self,
                       apiType: .secondary) { result in
       switch result {
       case .success(_):
         break
         
-      case .failure(_):
-        break
+      case .failure(let error):
+        print("fero \(error.statusCode)")
+        print("test \(error.json)")
       }
     }
-  }
-}
-
-// MARK: - Layout
-
-extension SecondaryController {
-  
-  private func setLayout() {
-    view.backgroundColor = .white
-    title = "Secondary Controller"
-    
-    tableView.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(tableView)
-    NSLayoutConstraint.activate([
-      tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-      tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-    ])
   }
 }

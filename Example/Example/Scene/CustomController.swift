@@ -6,77 +6,107 @@
 //
 
 import UIKit
+import QuickApi
+import Alamofire
 
-final class CustomController: UIViewController {
+final class CustomController: RequestController {
   
-  private let items = ["Post Successful Request",
-                       "Post Failure Request"]
-  
-  private let textView: UITextView = {
-    let textView = UITextView()
-    return textView
-  }()
-  
-  private lazy var tableView: UITableView = {
-    let tableView = UITableView()
-    tableView.tableFooterView = UIView(frame: .zero)
-    tableView.delegate = self
-    tableView.dataSource = self
-    return tableView
-  }()
+  private let httpHeader: HTTPHeaders = [
+    "Authorization" : "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MGE4ZTIxNzY4NTZhMDUwMjRhZDkzYzQwMWU3MDk5MiIsInN1YiI6IjYwNDU0ZmNjZDhlMjI1MDA0NTUyZjg5OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0eT2aN1gqiaZADmuf158U4fTJfS1jbQtD96g_kEbNhk",
+    "Content-Type" : "application/json;charset=utf-8"
+  ]
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    setLayout()
-    tableView.reloadData()
+      title = "Custom Controller"
+      items = ["Get Successful Request",
+               "Get Unauthorized Request",
+               "Get Failure Request"]
   }
 }
 
 // MARK: - TableView Delegate & DataSource
 
-extension CustomController: UITableViewDelegate, UITableViewDataSource {
-  
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return items.count
-  }
-  
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
-    cell.textLabel?.text = items[indexPath.row]
-    return cell
-  }
+extension CustomController {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
-    
+    switch indexPath.row {
+    case 0:
+      createListItem()
+      
+    case 1:
+      createListItemUnauthenticated()
+      
+    case 2:
+      createListItemFailure()
+      
+    default:
+      break
+    }
   }
 }
 
-// MARK: - Layout
+
+// MARK: - Requests
 
 extension CustomController {
   
-  private func setLayout() {
-    view.backgroundColor = .white
-    title = "Custom Controller"
+  private func createListItem() {
+    Quick.shared.customRequest(full: "https://api.themoviedb.org/4/list/1",
+                               header: httpHeader,
+                               method: .get,
+                               parameters: nil,
+                               decodeObject: TmdbResponse.self) { result in
+      switch result {
+      case .success(_):
+        break
+        
+      case .failure(let error):
+        print("fero \(error.statusCode)")
+        print("test \(error.json)")
+      }
+    }
+  }
+  
+  private func createListItemUnauthenticated() {
     
-    textView.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(textView)
-    NSLayoutConstraint.activate([
-      textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      textView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-      textView.heightAnchor.constraint(equalToConstant: 200)
-    ])
+    let wrongTokenHeader: HTTPHeaders =   [
+      "Authorization" : "wrongToken",
+      "Content-Type" : "application/json;charset=utf-8"
+    ]
     
-    tableView.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(tableView)
-    NSLayoutConstraint.activate([
-      tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      tableView.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 20),
-      tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-    ])
+    Quick.shared.customRequest(full: "https://api.themoviedb.org/4/list/1",
+                               header: wrongTokenHeader,
+                               method: .get,
+                               parameters: nil,
+                               decodeObject: TmdbResponse.self) { result in
+      switch result {
+      case .success(_):
+        break
+        
+      case .failure(let error):
+        print("fero \(error.statusCode)")
+        print("test \(error.json)")
+      }
+    }
+  }
+  
+  private func createListItemFailure() {
+    Quick.shared.customRequest(full: "https://api.themoviedb.org/4/list",
+                               header: httpHeader,
+                               method: .get,
+                               parameters: nil,
+                               decodeObject: TmdbResponse.self) { result in
+      switch result {
+      case .success(_):
+        break
+        
+      case .failure(let error):
+        print("fero \(error.statusCode)")
+        print("test \(error.json)")
+      }
+    }
   }
 }

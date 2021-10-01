@@ -58,8 +58,8 @@ extension Quick {
     networkLayer.unauthorizedDelegate = delegate
   }
   
-  public func setUnauthorizedServiceActive(_ isActive: Bool) {
-    networkLayer.unauthorizedServiceActive = isActive
+  public func setStatusCodeHandler(delegate: StatusCodeHandlerProtocol) {
+    networkLayer.statusCodeDelegate = delegate
   }
   
 //  public func setApiBaseUrlForMultipartWith(apiType: ApiTypes, apiUrl: String) {
@@ -116,7 +116,7 @@ extension Quick {
 extension Quick {
   
   public func customRequest<T: Decodable>(full: String,
-                                          header: HTTPHeaders,
+                                          header: HTTPHeaders? = nil,
                                           method: HTTPMethod,
                                           parameters: Parameters?,
                                           decodeObject: T.Type,

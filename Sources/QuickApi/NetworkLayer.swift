@@ -20,8 +20,11 @@ final class NetworkLayer {
   weak var headerDelegate: HttpCustomizationProtocols?
   weak var unauthorizedDelegate: UnauthorizedCustomizationProtocol?
   weak var customErrorDelegate: ErrorCustomizationProtocol?
+  weak var statusCodeDelegate: StatusCodeHandlerProtocol?
   
-  var unauthorizedServiceActive: Bool = false
+  private var unauthorizedServiceActive: Bool {
+    return !(unauthorizedDelegate == nil)
+  }
   
   private var primaryApi: String?
   private var secondaryApi: String?
@@ -50,8 +53,7 @@ extension NetworkLayer {
     let encodingType = layerHelper.getEncodingType(method: method)
     
     guard let sessionManager = sessionManager else {
-      print("Session Manager Issue detected.")
-      return
+      fatalError(Constants.sessionIssue)
     }
     
     let fullUrl = getFullUrl(url: url, apiType: apiType)
@@ -61,7 +63,7 @@ extension NetworkLayer {
       .request(fullUrl, method: method, parameters: parameters, encoding: encodingType, headers: httpHeader)
       .validate(statusCode: 200..<300)
       .responseDecodable(of: T.self) { [weak self] response in
-        print("\n\n\n ***************** Request send to = \(response.request?.url?.absoluteString ?? " *****************")")
+        print(Constants.requestUrl.replacingOccurrences(of: "$", with: response.request?.url?.absoluteString ?? "-"))
         self?.layerHelper.showJsonResponse(response.data)
         
         switch response.result {
@@ -74,11 +76,11 @@ extension NetworkLayer {
         case .failure(let error):
           guard let self = self else { return }
           if self.layerHelper.maxRetryCount <= retryCount {
-            print("\n\n\n ***************** Internet connection error. Failed with many retry attempts. ***********************")
-            
+            print(Constants.manyAttempts)
+            self.statusCodeDelegate?.handleStatusCodeFor(apiType: apiType, statusCode: response.response?.statusCode ?? 0)
             guard let data = response.data,
                   let responseModel = try? JSONDecoder().decode(T.self, from: data) else {
-              print("\n\n\n ***************** QuickApi has decoding failure. ***************** ")
+              print(Constants.failureDecoding)
               let quickError = QuickError<T>(alamofireError: error,
                                              response: nil,
                                              customErrorMessage: self.customErrorDelegate?.errorCustomization(json: self.layerHelper.getJsonFromData(response.data),
@@ -104,7 +106,7 @@ extension NetworkLayer {
                 DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
                   self?.request(url: url,
                                method: method,
-                               header: httpHeader,
+                               header: self?.headerDelegate?.httpHeaderCustomization(apiType: apiType) ?? [:],
                                parameters: parameters,
                                decodeObject: decodeObject,
                                retryCount: retryCount + 1,
@@ -119,7 +121,7 @@ extension NetworkLayer {
             
           } else {
             DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
-              print("n\n\n ************* Going to retry with #: \(retryCount+1) ***********************")
+              print(Constants.retryRequest.replacingOccurrences(of: "$", with: String(retryCount + 1)))
               self.request(url: url,
                            method: method,
                            header: httpHeader,
