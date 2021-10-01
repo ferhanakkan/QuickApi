@@ -108,6 +108,7 @@ extension NetworkLayer {
                                parameters: parameters,
                                decodeObject: decodeObject,
                                retryCount: retryCount + 1,
+                               apiType: apiType,
                                completion: completion)
                 }
               })
@@ -125,6 +126,7 @@ extension NetworkLayer {
                            parameters: parameters,
                            decodeObject: decodeObject,
                            retryCount: retryCount + 1,
+                           apiType: apiType,
                            isUnauthRequest: retryCount + 1 == self.layerHelper.maxRetryCount,
                            completion: completion)
             }

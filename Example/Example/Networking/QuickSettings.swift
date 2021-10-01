@@ -41,7 +41,7 @@ final class QuickSettings: HttpCustomizationProtocols, UnauthorizedCustomization
     case .secondary:
       return [
         "Authorization" : "Bearer \(tmdbToken)",
-//        "Content-Type" : "application/json;charset=utf-8"
+        "Content-Type" : "application/json;charset=utf-8"
       ]
       
     case .tertiary:
