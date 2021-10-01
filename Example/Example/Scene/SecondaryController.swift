@@ -6,16 +6,13 @@
 //
 
 import UIKit
+import QuickApi
 
 final class SecondaryController: UIViewController {
   
   private let items = ["Post Successful Request",
+                       "Post Unauthorized Request",
                        "Post Failure Request"]
-  
-  private let textView: UITextView = {
-    let textView = UITextView()
-    return textView
-  }()
   
   private lazy var tableView: UITableView = {
     let tableView = UITableView()
@@ -49,7 +46,83 @@ extension SecondaryController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
+    switch indexPath.row {
+    case 0:
+      createListItem()
+      
+    case 1:
+      createListItemUnauthenticated()
+      
+    case 2:
+      createListItemFailure()
+      
+    default:
+      break
+    }
+  }
+}
+
+
+// MARK: - Requests
+
+extension SecondaryController {
+  
+  private func createListItem() {
     
+    let params = TmdbRequest(name: "test",
+                             iso_639_1: "en")
+    
+    Quick.shared.post(url: "list",
+                      parameters: params.asDictionary(),
+                      decodeObject: TmdbResponse.self,
+                      apiType: .secondary) { result in
+      switch result {
+      case .success(_):
+        break
+        
+      case .failure(let error):
+        print("fero \(error.statusCode)")
+        print("test \(error.json)")
+      }
+    }
+  }
+  
+  private func createListItemUnauthenticated() {
+    
+    let params = TmdbRequest(name: "test",
+                             iso_639_1: "test")
+    
+    Quick.shared.post(url: "list",
+                      parameters: params.asDictionary(),
+                      decodeObject: TmdbResponse.self,
+                      apiType: .secondary) { result in
+      switch result {
+      case .success(_):
+        break
+        
+      case .failure(_):
+        break
+      }
+    }
+  }
+  
+  private func createListItemFailure() {
+    
+    let params = TmdbRequest(name: "test",
+                             iso_639_1: "test")
+    
+    Quick.shared.post(url: "wronUrl",
+                      parameters: params.asDictionary(),
+                      decodeObject: TmdbResponse.self,
+                      apiType: .secondary) { result in
+      switch result {
+      case .success(_):
+        break
+        
+      case .failure(_):
+        break
+      }
+    }
   }
 }
 
@@ -61,21 +134,12 @@ extension SecondaryController {
     view.backgroundColor = .white
     title = "Secondary Controller"
     
-    textView.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(textView)
-    NSLayoutConstraint.activate([
-      textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      textView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-      textView.heightAnchor.constraint(equalToConstant: 200)
-    ])
-    
     tableView.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(tableView)
     NSLayoutConstraint.activate([
       tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
       tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      tableView.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 20),
+      tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
       tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
     ])
   }

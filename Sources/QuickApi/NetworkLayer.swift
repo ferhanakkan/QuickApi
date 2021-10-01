@@ -61,7 +61,7 @@ extension NetworkLayer {
       .request(fullUrl, method: method, parameters: parameters, encoding: encodingType, headers: httpHeader)
       .validate(statusCode: 200..<300)
       .responseDecodable(of: T.self) { [weak self] response in
-        print("Request send to = \(response.request?.url?.absoluteString ?? "")")
+        print("\n\n\n ***************** Request send to = \(response.request?.url?.absoluteString ?? " *****************")")
         self?.layerHelper.showJsonResponse(response.data)
         
         switch response.result {
@@ -74,11 +74,11 @@ extension NetworkLayer {
         case .failure(let error):
           guard let self = self else { return }
           if self.layerHelper.maxRetryCount <= retryCount {
-            print("***************** Internet connection error. Failed with many retry attempts. ***********************")
+            print("\n\n\n ***************** Internet connection error. Failed with many retry attempts. ***********************")
             
             guard let data = response.data,
                   let responseModel = try? JSONDecoder().decode(T.self, from: data) else {
-              print("QuickApi has decoding failure.")
+              print("\n\n\n ***************** QuickApi has decoding failure. ***************** ")
               let quickError = QuickError<T>(alamofireError: error,
                                              response: nil,
                                              customErrorMessage: self.customErrorDelegate?.errorCustomization(json: self.layerHelper.getJsonFromData(response.data),
@@ -118,7 +118,7 @@ extension NetworkLayer {
             
           } else {
             DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
-              print("***************** Going to retry with #: \(retryCount+1) ***********************")
+              print("n\n\n ************* Going to retry with #: \(retryCount+1) ***********************")
               self.request(url: url,
                            method: method,
                            header: httpHeader,
