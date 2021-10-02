@@ -4,9 +4,8 @@
 <img src='https://github.com/ferhanakkan/QuickApi/blob/master/Example/Example/Assets.xcassets/AppIcon.appiconset/1024.png' width="200" />
 </p>
 
-QuickApi allows you to easily create a network layer. You can use it for your GET, POST, DELETE, PUT, PATCH and also MULTİPART actions. 
+QuickApi allows you to work with more than one API in your applications, without dealing with decode operations. Apart from that  allows you to solve the error handling, 401 unautehntication handling,  status code handling problems in a simplified way.  QuickApi supports GET, POST, DELETE, PUT, PATCH and also MULTİPART requests.
 
-[![CI Status](https://img.shields.io/travis/ferhanakkan/QuickApi.svg?style=flat)](https://travis-ci.org/ferhanakkan/QuickApi)
 [![Version](https://img.shields.io/cocoapods/v/QuickApi.svg?style=flat)](https://cocoapods.org/pods/QuickApi)
 [![License](https://img.shields.io/cocoapods/l/QuickApi.svg?style=flat)](https://cocoapods.org/pods/QuickApi)
 [![Platform](https://img.shields.io/cocoapods/p/QuickApi.svg?style=flat)](https://cocoapods.org/pods/QuickApi)
@@ -52,37 +51,46 @@ dependencies: [
 
 ## Usage 
 
-### Set QuickApi
+### Functions
 
-Firstly you have to set Quick api properties.
+  Some funtctions to set QuickApi.
 
-```
+```swift
 
-
-func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    // Override point for customization after application launch.
-    
-    Quick.shared.setApiBaseUrl(url: "https://www.yourApi.com/") // You have to set Api Url.
-    Quick.shared.timeOutTime = 10 // 10 Second. You have to set timeOutTime. İt accept seconds as Int.
-    Quick.shared.showResponseJSONOnConsole = true // If you want to see your response data on console you have to set it true. It's totaly optional. It's preset false.
-    Quick.shared.showLoadingInducator = true // If you want to see loading inducator while request continues you have to set it true. It's totaly optional. It's preset false.
-    Quick.shared.acceptLanguageCode = "tr" // If you want you can also add Accept language to your Http Header.
-    Quick.shared.showAlertMessageInError = true // You can show your respose errors as alert message to your client.It's preset false
-    Quick.shared.messageTitle = "Error" // You can also change alert message title.
-    Quick.shared.buttonTitle = "Ok" // You can also change alert message button title.
-    You can do this actions also in another part of app. It will be saved on local database. It's preset nil
-    Quick.shared.setToken(token: "123123") // If you want you can also add Token to your Http Header. You can do this actions also in another part of app. It will be saved on local database. It's preset nil
-    LoadingView.loadingBackgroundColor = UIColor.darkGray.withAlphaComponent(0.8) // It's preset color of main background color of Loading View it also can be changed if you prefer. It's preset UIColor.darkGray.withAlphaComponent(0.8)
-    LoadingView.loadingSubViewBackgroundColor = UIColor.lightGray // It's preset color of inducator background color of Loading View it also can be changed if you prefer. It's preset UIColor.lightGray
-    
-    return true
-}
+  // Common settings for General and Multipart requests.
+  
+  Quick.shared.cancelAllRequests() // Cancel all requests.
+  Quick.shared.showResponseInDebug(_ isEnable: Bool) // It allows the incoming response to be seen on the debug.
+  Quick.shared.setTimeOut(_ time: Int) // Sets the timeout for the discarded request.
+  Quick.shared.setMaxNumberOfRetry(_ count: Int) // It determines how many times it will be repeated if the request is unsuccessful.
+  
+  Quick.shared.setApiBaseUrlWith(apiType: ApiTypes, apiUrl: String) // Sets api url.
+  Quick.shared.setCustomErrorManager(delegate: ErrorCustomizationProtocol) // Set error delegate for network requests.
+  Quick.shared.setHeaderCompletion(delegate: HttpCustomizationProtocols)  // Set header delegate for network requests.
+  Quick.shared.setUnauthorized(delegate: UnauthorizedCustomizationProtocol)  // Set unauthorized delegate for network requests.
+  Quick.shared.setStatusCodeHandler(delegate: StatusCodeHandlerProtocol)  // Set status delegate for network requests.
+  
+  Quick.shared.get(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .primary, completion: @escaping GenericResponseCompletion<T>)   // Get
+  Quick.shared.post(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .primary, completion: @escaping GenericResponseCompletion<T>)   // Post
+  Quick.shared.put(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .primary, completion: @escaping GenericResponseCompletion<T>)   // Put
+  Quick.shared.patch(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .primary, completion: @escaping GenericResponseCompletion<T>)   // Patch
+  Quick.shared.delete(url: String, parameters: Parameters? = nil, decodeObject: T.Type, apiType: ApiTypes = .primary, completion: @escaping GenericResponseCompletion<T>)   // Delete
+  Quick.shared.customRequest(full: String, header: HTTPHeaders? = nil, method: HTTPMethod, parameters: Parameters?, decodeObject: T.Type, completion: @escaping GenericResponseCompletion<T>) // Custom request you can create request as you wish.
+  
+  
+  Quick.shared.setApiBaseUrlWithForMultipart(apiType: ApiTypes, apiUrl: String) // Sets api url for multipart.
+  Quick.shared.setCustomErrorManagerForMultipart(delegate: ErrorCustomizationProtocol) // Set error delegate for network requests for multipart.
+  Quick.shared.setHeaderCompletionorMultipart(delegate: HttpCustomizationProtocols) // Set header delegate for network requests for multipart.
+  Quick.shared.setUnauthorizedorMultipart(delegate: UnauthorizedCustomizationProtocol) // Set unauthorized delegate for network requests for multipart.
+  Quick.shared.setStatusCodeHandlerorMultipart(delegate: StatusCodeHandlerProtocol)  // Set status delegate for network requests for multipart.
+  
+  
+  Quick.shared.upload(url: String, method: HTTPMethod, parameters: [String: Any], datas: [MultipartDataModel], decodeObject: T.Type, apiType: ApiTypes, completion: @escaping GenericResponseCompletion<T>) // Multipart
+  Quick.shared.customMultipartUploadRequest(fullUrl: String, header: HTTPHeaders, method: HTTPMethod, parameters: [String: Any], datas: [MultipartDataModel], decodeObject: T.Type, completion: @escaping GenericResponseCompletion<T>)  // You can create multipart request as you wish.
 ```
 
 
 ### Quick Start
-
-
 
 ```swift
 
@@ -96,103 +104,54 @@ struct TestApiResponse: Codable {
     var userId: Int
 }
 
-struct TestApiDeleteResponse: Codable {
-
-}
-
-
-class ViewController: UIViewController {
+class TestController: UIViewController {
 
         
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        //Get action with response and Json
-        Quick.shared.getRequest(endPoint: "posts/", responseObject: [TestApiResponse].self) { (response, json, err) in
-            if let controledError = err {
-                print(controledError)
-            } else {
-                if let controledJson = json as? [[String: Any]] {
-                    print(controledJson)
-                }
-                print(response)
-            }
-        }
-
-        //Get action with response
-        Quick.shared.getRequest(endPoint: "posts/", responseObject: [TestApiResponse].self) { (response, err) in
-            if let controledError = err {
-                print(controledError)
-            } else {
-                print(response)
-            }
-        }
-
-        //Post aciton with Json Response and Json
-        Quick.shared.postRequest(url: "posts", parameters: ["title": "quickApi", "body": "quickApiBody","userId": 1], responseObject: TestApiResponse.self) { (response, json, err) in
-            if let controledError = err {
-                print(controledError)
-            } else {
-                if let controledJson = json as? [String: Any] {
-                    print(controledJson)
-                }
-                print(response)
-            }
-        }
-
-        //Post aciton with Json Response
-        Quick.shared.postRequest(url: "posts", parameters: ["title": "quickApi", "body": "quickApiBody","userId": 1], responseObject: TestApiResponse.self) { (response, err) in
-            if let controledError = err {
-                print(controledError)
-            } else {
-                print(response)
-            }
-        }
+        Quick.shared.setMaxNumberOfRetry(3)
+        Quick.shared.setTimeOut(10)
+        Quick.shared.showResponseInDebug(true)
         
-        //Put aciton with Json Response and Json
-        Quick.shared.patchRequest(url: "posts/1", parameters: ["title": "quickApi"], responseObject: TestApiResponse.self) { (response, json, err) in
-            if let controledError = err {
-                print(controledError)
-            } else {
-                if let controledJson = json as? [String: Any] {
-                    print(controledJson)
-                }
-                print(response)
-            }
-        }
-
-        //Put aciton with Json Response
-        Quick.shared.patchRequest(url: "posts/1", parameters: ["title": "quickApi"], responseObject: TestApiResponse.self) { (response, err) in
-            if let controledError = err {
-                print(controledError)
-            } else {
-                print(response)
-            }
-        }
+        Quick.shared.setUnauthorized(delegate: self)
+        Quick.shared.setHeaderCompletion(delegate: self)
+        Quick.shared.setCustomErrorManager(delegate: self)
+        Quick.shared.setStatusCodeHandler(delegate: self)
         
-        //Delete aciton with Json Response and Json
-        Quick.shared.deleteRequest(url: "posts/1", parameters: nil, responseObject: TestApiDeleteResponse.self) { (response, json, err) in
-            if let controledError = err {
-                print(controledError)
-            } else {
-                if let controledJson = json as? [String: Any] {
-                    print(controledJson)
-                }
-                print(response)
-            }
-        }
-
-        //Delete aciton with Json Response
-        Quick.shared.deleteRequest(url: "posts/1", parameters: nil, responseObject: TestApiDeleteResponse.self) { (response, err) in
-            if let controledError = err {
-                print(controledError)
-            } else {
-                print(response)
-            }
+        Quick.shared.setApiBaseUrlWith(apiType: .primary, apiUrl: "http://api.anyapi.org/")
+        
+        //While you are call request there is a parameter named apiType it's setted .primary as default. When you call request 
+        //for second api you have to set it as apiType: .secondary .
+        Quick.shared.get(url: "anyEndPoint",
+                         parameters: nil,
+                         decodeObject: TestApiResponse.self) { result in
+          switch result {
+          case .success(let value):
+            print(value) // Decodade value as you give decodeObject type.
+          case .failure(let error):
+            print(error.statusCode ?? "")
+            print(error.json ?? "")
+          }
         }
     }
 }
 ```
+
+### QuickApi Error Object
+
+```swift
+
+struct QuickError<T: Decodable>: Error {
+  public let alamofireError: AFError //When error occured in request you can get alamofire error as usual.
+  public let response: T? // Your decode object if decoding avaliable.
+  public let customErrorMessage: Any? // Custom error message which you want to get from json when error occured.
+  public let json: [String : Any]? // Json response .
+  public let data: Data? // Response data.
+  public let statusCode: Int? // Status code of request.
+}
+```
+
 
 ### Error Handling
 
