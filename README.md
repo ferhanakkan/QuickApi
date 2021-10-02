@@ -24,11 +24,11 @@ QuickApi allows you to work with more than one API in your applications, without
 
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [Usage](#usage)
 - [Error Handling](#usage)
-- [Http Header Handling](#httpheaderhandling)
+- [Http Header Handling](#httpHeaderHandling)
 - [Status Code Handling](#statuscodehandling)
 - [Unauthorized Handling](#unauthorizedhandling)
-- [Usage](#usage)
 - [Author](#author)
 - [License](#license)
 
