@@ -9,10 +9,10 @@ import Foundation
 import Alamofire
 
 public protocol UnauthorizedCustomizationProtocol: AnyObject {
-  func unauthorizedCustomization(apiType: ApiTypes, completion: @escaping (_ retryLastRequest: Bool) -> ())
+  func unauthorizedCustomization(apiType: ApiTypes, completion: @escaping () -> ())
 }
 
 public extension UnauthorizedCustomizationProtocol {
-  func unauthorizedCustomization(apiType: ApiTypes, completion: @escaping (_ retryLastRequest: Bool) -> ()) {
+  func unauthorizedCustomization(apiType: ApiTypes, completion: @escaping () -> ()) {
   }
 }

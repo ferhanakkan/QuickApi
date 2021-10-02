@@ -102,11 +102,11 @@ extension NetworkLayer {
             
             switch response.response?.statusCode ?? 0 {
             case 401 where isUnauthRequest && self.unauthorizedServiceActive:
-              self.unauthorizedDelegate?.unauthorizedCustomization(apiType: apiType, completion: { [weak self] retryLastResponse in
+              self.unauthorizedDelegate?.unauthorizedCustomization(apiType: apiType, completion: {
                 DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
-                  self?.request(url: url,
+                  self.request(url: url,
                                 method: method,
-                                header: self?.headerDelegate?.httpHeaderCustomization(apiType: apiType) ?? [:],
+                                header: self.headerDelegate?.httpHeaderCustomization(apiType: apiType) ?? [:],
                                 parameters: parameters,
                                 decodeObject: decodeObject,
                                 retryCount: retryCount + 1,

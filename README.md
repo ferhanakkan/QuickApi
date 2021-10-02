@@ -11,9 +11,23 @@ QuickApi allows you to work with more than one API in your applications, without
 [![Platform](https://img.shields.io/cocoapods/p/QuickApi.svg?style=flat)](https://cocoapods.org/pods/QuickApi)
 
 ## Contents
+-  Supports 3 diffrent api and custom requests.
+-  Supports 3 diffrent api and custom requests for multipart.
+-  Response object will decode automatically
+-  Retry support for requests
+-  Error Handling
+-  Http Header Handling
+-  Status Code Handling
+-  Unauthorized Handling
+
+## Contents
 
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [Error Handling](#usage)
+- [Http Header Handling](#httpheaderhandling)
+- [Status Code Handling](#statuscodehandling)
+- [Unauthorized Handling](#unauthorizedhandling)
 - [Usage](#usage)
 - [Author](#author)
 - [License](#license)
@@ -114,21 +128,53 @@ class TestController: UIViewController {
         Quick.shared.setTimeOut(10)
         Quick.shared.showResponseInDebug(true)
         
-        Quick.shared.setUnauthorized(delegate: self)
-        Quick.shared.setHeaderCompletion(delegate: self)
-        Quick.shared.setCustomErrorManager(delegate: self)
-        Quick.shared.setStatusCodeHandler(delegate: self)
-        
-        Quick.shared.setApiBaseUrlWith(apiType: .primary, apiUrl: "http://api.anyapi.org/")
-        
-        //While you are call request there is a parameter named apiType it's setted .primary as default. When you call request 
-        //for second api you have to set it as apiType: .secondary .
-        Quick.shared.get(url: "anyEndPoint",
-                         parameters: nil,
-                         decodeObject: TestApiResponse.self) { result in
+        Quick.shared.customRequest(full: "https://www.anyapi.com/endPoint",
+                                   method: .get,
+                                   parameters: ["paramName" : "param"],
+                                   decodeObject: OpenWeatherResponse.self) { result in
           switch result {
           case .success(let value):
-            print(value) // Decodade value as you give decodeObject type.
+            print(value)
+          case .failure(let error):
+            print(error.statusCode ?? "")
+            print(error.json ?? "")
+          }
+        }
+    }
+}
+```
+
+### Custom Request 
+
+```swift
+
+import UIKit
+import QuickApi
+
+struct TestApiResponse: Codable {
+    var id: Int
+    var title: String
+    var body: String
+    var userId: Int
+}
+
+class TestController: UIViewController {
+
+        
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        Quick.shared.setMaxNumberOfRetry(3)
+        Quick.shared.setTimeOut(10)
+        Quick.shared.showResponseInDebug(true)
+        
+        Quick.shared.customRequest(full: "https://www.anyapi.com/endPoint",
+                                   method: .get,
+                                   parameters: ["paramName" : "param"],
+                                   decodeObject: OpenWeatherResponse.self) { result in
+          switch result {
+          case .success(let value):
+            print(value)
           case .failure(let error):
             print(error.statusCode ?? "")
             print(error.json ?? "")
@@ -152,54 +198,123 @@ struct QuickError<T: Decodable>: Error {
 }
 ```
 
+## Error Handling
 
-### Error Handling
-
-As Quick, we found the biggest problem in generic services, to deal with the error, by leaving the solution to you. Normally, if Quick.shared.customErrorModel = false as the QuickApi library, we give an error return as the model you have given can be decoded or not. However, if you set your own error model as custom, error messages will return to you as errors, except 200-300 returned from the service. Let's look at an example ... 
+When you want to get parameters that are not in your response models with the QuickApi, set the setCustomErrorManager(delegate: ErrorCustomizationProtocol) and setCustomErrorManagerForMultipart(delegate: ErrorCustomizationProtocol) delegates. Add the ErrorCustomizationProtocol protocol to your class. Select the parameters you want to receive from JSON and when your call request fails, your parameter will come in your error object. If you want, you can do the necessary operations when the parameters you want come from api.  It's optional to use.
 
 ```swift
-import UIKit
 import QuickApi
 
-class ViewController: UIViewController {
-
-        
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-         
-        //You can do this action where ever you want!!!
-       
-        Quick.shared.errorModel.setCustomError = { json, statusCode in
-            if let messagea = json["test"] as? [String:Any] {
-                if let text = messagea["test"] as? String {
-                    return text
-                } else {
-                    return nil
-                }
-            }
-            if let message = json["message"] as? [String:Any] {
-                if let text = message["messageText"] as? String {
-                    return text
-                } else {
-                    return nil
-                }
-            } else if let errors = json["errors"] as? [String: Any] {
-                if let sub = errors["errorText"] as? String {
-                    return sub
-                } else {
-                    return nil
-                }
-            } else {
-                return nil
-            }
-        }
+class QuickSettings: ErrorCustomizationProtocol {
+  
+  func errorCustomization(json: [String : Any]?, apiType: ApiTypes) -> Any? {
+    switch apiType {
+    case .primary:
+      return json?["message"]
+      
+    case .secondary:
+      return json?["status_code"]
+      
+    case .tertiary:
+      return nil
+      
+    case .custom:
+      return json?["status_code"]
     }
+  }
+}
+```
+
+## Http Header Handling
+
+When you need to add http header for your requests with Quick API, set setHeaderCompletion(delegate: HttpCustomizationProtocols) and setHeaderCompletionForMultipart(delegate: HttpCustomizationProtocols). Add the HttpCustomizationProtocols protocol to your class. You can return http header according to your api type as return within the function. It's optional to use.
+
+```swift
+import Alamofire
+import QuickApi
+
+extension QuickSettings: HttpCustomizationProtocols {
+  
+  func httpHeaderCustomization(apiType: ApiTypes) -> HTTPHeaders? {
+    switch apiType {
+    case .primary:
+      return nil
+      
+    case .secondary:
+      return [
+        "Authorization" : "Bearer anyToken",
+        "Content-Type" : "application/json;charset=utf-8"
+      ]
+      
+    case .tertiary:
+      return nil
+      
+    case .custom:
+      return nil
+    }
+  }
+}
+```
+
+## Status Code Handling
+
+When you want to take action according to the status code for your requests with Quick API, set setStatusCodeHandler(delegate: StatusCodeHandlerProtocol) and setStatusCodeHandlerForMultipart(delegate: StatusCodeHandlerProtocol). Add the HttpCustomizationProtocols protocol to your class. Then you can take the necessary actions according to your api type. It's optional to use.
+
+```swift
+import QuickApi
+
+extension QuickSettings: StatusCodeHandlerProtocol {
+  
+  func handleStatusCodeFor(apiType: ApiTypes, statusCode: Int) {
+    switch apiType {
+    case .primary:
+      if statusCode == 301 {
+       // Do some logic stuff what you need. 
+      }
+      
+    case .secondary:
+      break
+      
+    case .tertiary:
+      break
+      
+    case .custom:
+      break
+    }
+  }
+}
+```
+
+## Unauthorized Handling
+
+Set the delegates setUnauthorized(delegate: UnauthorizedCustomizationProtocol) and setUnauthorizedForMultipart(delegate: UnauthorizedCustomizationProtocol) so that you can take action in case of your requests with 401 error code, ie unauthorized. Add the UnauthorizedCustomizationProtocol protocol to your class. After these processes, if your request receives a 401 error, this function will be triggered and you can take action according to your API type. Here you can send the required refresh token request. When your operations are completed, completion will be called and the request that received the last 401 error will be called again.
+
+```swift
+import QuickApi
+
+class QuickSettings: UnauthorizedCustomizationProtocol {
+  
+  func unauthorizedCustomization(apiType: ApiTypes, completion: @escaping () -> ()) {
+    switch apiType {
+    case .primary:
+      completion()
+      
+    case .secondary:
+    break
+      
+    case .tertiary:
+      break
+      
+    case .custom:
+      break
+    }
+  }
 }
 ```
 
 ## Author
 
-ferhanakkan, ferhanakkan@gmail.com
+Ferhan Akkan, ferhanakkan@gmail.com
 
 ## License
 

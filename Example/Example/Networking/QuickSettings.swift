@@ -46,7 +46,7 @@ extension QuickSettings {
 
 extension QuickSettings: UnauthorizedCustomizationProtocol {
   
-  func unauthorizedCustomization(apiType: ApiTypes, completion: @escaping (Bool) -> ()) {
+  func unauthorizedCustomization(apiType: ApiTypes, completion: @escaping () -> ()) {
     switch apiType {
     case .primary:
       //We can't handle unauthorized status in OpenWeatherMap because it gets token in query. You have to change request parameters.
@@ -54,7 +54,7 @@ extension QuickSettings: UnauthorizedCustomizationProtocol {
       
     case .secondary:
       setTrueTokenForSecondartApi()
-      completion(true)
+      completion()
       
     case .tertiary:
       break
