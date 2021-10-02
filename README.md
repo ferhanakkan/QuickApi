@@ -10,7 +10,7 @@ QuickApi allows you to work with more than one API in your applications, without
 [![License](https://img.shields.io/cocoapods/l/QuickApi.svg?style=flat)](https://cocoapods.org/pods/QuickApi)
 [![Platform](https://img.shields.io/cocoapods/p/QuickApi.svg?style=flat)](https://cocoapods.org/pods/QuickApi)
 
-## Contents
+## Features
 -  Supports 3 diffrent api and custom requests.
 -  Supports 3 diffrent api and custom requests for multipart.
 -  Response object will decode automatically
@@ -25,8 +25,8 @@ QuickApi allows you to work with more than one API in your applications, without
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Error Handling](#usage)
-- [Http Header Handling](#httpHeaderHandling)
+- [Error Handling](#)
+- [Http Header Handling](#http-header-handling)
 - [Status Code Handling](#statuscodehandling)
 - [Unauthorized Handling](#unauthorizedhandling)
 - [Author](#author)
