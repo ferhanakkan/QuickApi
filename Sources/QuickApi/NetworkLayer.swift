@@ -105,13 +105,13 @@ extension NetworkLayer {
               self.unauthorizedDelegate?.unauthorizedCustomization(apiType: apiType, completion: { [weak self] retryLastResponse in
                 DispatchQueue.main.asyncAfter(deadline: .now()+1.5) {
                   self?.request(url: url,
-                               method: method,
-                               header: self?.headerDelegate?.httpHeaderCustomization(apiType: apiType) ?? [:],
-                               parameters: parameters,
-                               decodeObject: decodeObject,
-                               retryCount: retryCount + 1,
-                               apiType: apiType,
-                               completion: completion)
+                                method: method,
+                                header: self?.headerDelegate?.httpHeaderCustomization(apiType: apiType) ?? [:],
+                                parameters: parameters,
+                                decodeObject: decodeObject,
+                                retryCount: retryCount + 1,
+                                apiType: apiType,
+                                completion: completion)
                 }
               })
               

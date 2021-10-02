@@ -76,7 +76,7 @@ extension MultipartNetworkLayer {
     headers: httpHeader)
     .validate(statusCode: 200..<300)
     .uploadProgress(closure: { progress in
-      print(CGFloat(progress.fractionCompleted)*100)
+      print(Float(progress.fractionCompleted)*100)
     })
     .responseDecodable(of: T.self) { [weak self] response in
       print(Constants.requestUrl.replacingOccurrences(of: "$", with: response.request?.url?.absoluteString ?? "-"))

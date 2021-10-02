@@ -12,14 +12,10 @@
 		5872A25A27065F880015A0D1 /* PrimaryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A25927065F880015A0D1 /* PrimaryController.swift */; };
 		5872A25C27065F930015A0D1 /* SecondaryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A25B27065F930015A0D1 /* SecondaryController.swift */; };
 		5872A25E27065FA00015A0D1 /* CustomController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A25D27065FA00015A0D1 /* CustomController.swift */; };
-		5872A26027065FAD0015A0D1 /* MultipartController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A25F27065FAD0015A0D1 /* MultipartController.swift */; };
-		5872A26227065FBA0015A0D1 /* CustomMultipartController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A26127065FBA0015A0D1 /* CustomMultipartController.swift */; };
-		5872A2652706698F0015A0D1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A2642706698F0015A0D1 /* LoadingView.swift */; };
 		5872A26727066FBC0015A0D1 /* OpenWeatherResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A26627066FBC0015A0D1 /* OpenWeatherResponse.swift */; };
 		5872A2692706709A0015A0D1 /* OpenWeatherRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A2682706709A0015A0D1 /* OpenWeatherRequest.swift */; };
 		5872A26B2706AEF20015A0D1 /* TmdbResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A26A2706AEF20015A0D1 /* TmdbResponse.swift */; };
 		5872A2712707AAFD0015A0D1 /* RequestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A2702707AAFD0015A0D1 /* RequestController.swift */; };
-		5872A2732707B60D0015A0D1 /* QuickSettingsMultipart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872A2722707B60D0015A0D1 /* QuickSettingsMultipart.swift */; };
 		587ECB312703CD7F00F6032B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587ECB302703CD7F00F6032B /* AppDelegate.swift */; };
 		587ECB3A2703CD8100F6032B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 587ECB392703CD8100F6032B /* Assets.xcassets */; };
 		587ECB3D2703CD8100F6032B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 587ECB3B2703CD8100F6032B /* LaunchScreen.storyboard */; };
@@ -34,14 +30,10 @@
 		5872A25927065F880015A0D1 /* PrimaryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryController.swift; sourceTree = "<group>"; };
 		5872A25B27065F930015A0D1 /* SecondaryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryController.swift; sourceTree = "<group>"; };
 		5872A25D27065FA00015A0D1 /* CustomController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomController.swift; sourceTree = "<group>"; };
-		5872A25F27065FAD0015A0D1 /* MultipartController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipartController.swift; sourceTree = "<group>"; };
-		5872A26127065FBA0015A0D1 /* CustomMultipartController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMultipartController.swift; sourceTree = "<group>"; };
-		5872A2642706698F0015A0D1 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		5872A26627066FBC0015A0D1 /* OpenWeatherResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherResponse.swift; sourceTree = "<group>"; };
 		5872A2682706709A0015A0D1 /* OpenWeatherRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherRequest.swift; sourceTree = "<group>"; };
 		5872A26A2706AEF20015A0D1 /* TmdbResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmdbResponse.swift; sourceTree = "<group>"; };
 		5872A2702707AAFD0015A0D1 /* RequestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestController.swift; sourceTree = "<group>"; };
-		5872A2722707B60D0015A0D1 /* QuickSettingsMultipart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSettingsMultipart.swift; sourceTree = "<group>"; };
 		587ECB2D2703CD7F00F6032B /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		587ECB302703CD7F00F6032B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		587ECB392703CD8100F6032B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -78,8 +70,6 @@
 				5872A25927065F880015A0D1 /* PrimaryController.swift */,
 				5872A25B27065F930015A0D1 /* SecondaryController.swift */,
 				5872A25D27065FA00015A0D1 /* CustomController.swift */,
-				5872A25F27065FAD0015A0D1 /* MultipartController.swift */,
-				5872A26127065FBA0015A0D1 /* CustomMultipartController.swift */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -88,7 +78,6 @@
 			isa = PBXGroup;
 			children = (
 				5872A25527065EBF0015A0D1 /* QuickSettings.swift */,
-				5872A2722707B60D0015A0D1 /* QuickSettingsMultipart.swift */,
 				5872A25427065EBF0015A0D1 /* Response */,
 				5872A25627065EBF0015A0D1 /* Request */,
 			);
@@ -110,14 +99,6 @@
 				5872A2682706709A0015A0D1 /* OpenWeatherRequest.swift */,
 			);
 			path = Request;
-			sourceTree = "<group>";
-		};
-		5872A263270669840015A0D1 /* CustomViews */ = {
-			isa = PBXGroup;
-			children = (
-				5872A2642706698F0015A0D1 /* LoadingView.swift */,
-			);
-			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		5872A26E2707AAE50015A0D1 /* Core */ = {
@@ -158,7 +139,6 @@
 			isa = PBXGroup;
 			children = (
 				5872A26E2707AAE50015A0D1 /* Core */,
-				5872A263270669840015A0D1 /* CustomViews */,
 				5872A25327065EBF0015A0D1 /* Networking */,
 				5872A25127065EBF0015A0D1 /* Scene */,
 				587ECB392703CD8100F6032B /* Assets.xcassets */,
@@ -296,14 +276,10 @@
 				5872A2712707AAFD0015A0D1 /* RequestController.swift in Sources */,
 				5872A25727065EBF0015A0D1 /* HomeController.swift in Sources */,
 				5872A25827065EBF0015A0D1 /* QuickSettings.swift in Sources */,
-				5872A26227065FBA0015A0D1 /* CustomMultipartController.swift in Sources */,
 				5872A25A27065F880015A0D1 /* PrimaryController.swift in Sources */,
 				5872A26B2706AEF20015A0D1 /* TmdbResponse.swift in Sources */,
-				5872A26027065FAD0015A0D1 /* MultipartController.swift in Sources */,
 				587ECB312703CD7F00F6032B /* AppDelegate.swift in Sources */,
-				5872A2732707B60D0015A0D1 /* QuickSettingsMultipart.swift in Sources */,
 				5872A25C27065F930015A0D1 /* SecondaryController.swift in Sources */,
-				5872A2652706698F0015A0D1 /* LoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

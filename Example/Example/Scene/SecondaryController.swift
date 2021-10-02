@@ -61,8 +61,8 @@ extension SecondaryController {
         break
         
       case .failure(let error):
-        print("fero \(error.statusCode)")
-        print("test \(error.json)")
+        print(error.statusCode ?? "")
+        print(error.json ?? "")
       }
     }
   }
@@ -78,8 +78,8 @@ extension SecondaryController {
         break
         
       case .failure(let error):
-        print("fero \(error.statusCode)")
-        print("test \(error.json)")
+        print(error.statusCode ?? "")
+        print(error.json ?? "")
       }
     }
   }
@@ -95,8 +95,8 @@ extension SecondaryController {
         break
         
       case .failure(let error):
-        print("fero \(error.statusCode)")
-        print("test \(error.json)")
+        print(error.statusCode ?? "")
+        print(error.json ?? "")
       }
     }
   }

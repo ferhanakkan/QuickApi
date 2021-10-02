@@ -55,7 +55,8 @@ extension PrimaryController {
       case .success(let value):
         print(value)
       case .failure(let error):
-        print(error.alamofireError.url)
+        print(error.statusCode ?? "")
+        print(error.json ?? "")
       }
     }
   }
@@ -72,8 +73,8 @@ extension PrimaryController {
       case .success(let value):
         print(value)
       case .failure(let error):
-        //        print(error.json ?? [:])
-        print(error.response)
+        print(error.statusCode ?? "")
+        print(error.json ?? "")
       }
     }
   }

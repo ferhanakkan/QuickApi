@@ -14,11 +14,7 @@ final class QuickSettings {
   
   var tmdbToken: String = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MGE4ZTIxNzY4NTZhMDUwMjRhZDkzYzQwMWU3MDk5MiIsInN1YiI6IjYwNDU0ZmNjZDhlMjI1MDA0NTUyZjg5OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.0eT2aN1gqiaZADmuf158U4fTJfS1jbQtD96g_kEbNhk"
   
-  init() {
-    setQuickApiSettings()
-  }
-  
-  private func setQuickApiSettings() {
+  func setQuickApiSettings() {
     Quick.shared.setMaxNumberOfRetry(3)
     Quick.shared.setTimeOut(10)
     Quick.shared.showResponseInDebug(true)
@@ -30,7 +26,6 @@ final class QuickSettings {
     
     Quick.shared.setApiBaseUrlWith(apiType: .primary, apiUrl: "http://api.openweathermap.org/")
     Quick.shared.setApiBaseUrlWith(apiType: .secondary, apiUrl: "https://api.themoviedb.org/4/")
-//    Quick.shared.setApiBaseUrlForMultipartWith(apiType: .primary, apiUrl: "")
   }
 }
 
