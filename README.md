@@ -25,10 +25,10 @@ QuickApi allows you to work with more than one API in your applications, without
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Error Handling](#)
+- [Error Handling](#error-handling)
 - [Http Header Handling](#http-header-handling)
-- [Status Code Handling](#statuscodehandling)
-- [Unauthorized Handling](#unauthorizedhandling)
+- [Status Code Handling](#status-code-handling)
+- [Unauthorized Handling](#unauthorized-handling)
 - [Author](#author)
 - [License](#license)
 
