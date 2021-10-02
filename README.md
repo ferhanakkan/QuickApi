@@ -1,7 +1,7 @@
 # QuickApi
 
 <p align="center">
-<img src='https://github.com/ferhanakkan/QuickApi/blob/master/icon.png' width="200" />
+<img src='https://github.com/ferhanakkan/QuickApi/blob/master/Example/Example/Assets.xcassets/AppIcon.appiconset/1024.png' width="200" />
 </p>
 
 QuickApi allows you to easily create a network layer. You can use it for your GET, POST, DELETE, PUT, PATCH and also MULTİPART actions. 
