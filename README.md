@@ -107,7 +107,6 @@ dependencies: [
 ### Quick Start
 
 ```swift
-
 import UIKit
 import QuickApi
 
@@ -120,7 +119,6 @@ struct TestApiResponse: Codable {
 
 class TestController: UIViewController {
 
-        
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -147,7 +145,6 @@ class TestController: UIViewController {
 ### Custom Request 
 
 ```swift
-
 import UIKit
 import QuickApi
 
@@ -160,7 +157,6 @@ struct TestApiResponse: Codable {
 
 class TestController: UIViewController {
 
-        
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -187,7 +183,6 @@ class TestController: UIViewController {
 ### QuickApi Error Object
 
 ```swift
-
 struct QuickError<T: Decodable>: Error {
   public let alamofireError: AFError //When error occured in request you can get alamofire error as usual.
   public let response: T? // Your decode object if decoding avaliable.
